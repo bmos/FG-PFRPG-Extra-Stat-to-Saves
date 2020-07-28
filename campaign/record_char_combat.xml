@@ -51,19 +51,37 @@
 			</number_charcombatabilitymod>
 			<cycler_charcombatability name="fortitudestat2">
 				<anchored to="fortitudebase" position="aboveright" offset="-112,-20" />
-				<baseability>constitution</baseability>
+				<baseability>-</baseability>
 				<fieldabilitymod>fortitudestatmod2</fieldabilitymod>
 				<source><name>saves.fortitude.ability2</name></source>
+				<parameters><defaultlabelres>-</defaultlabelres></parameters>
+				<default></default>
 			</cycler_charcombatability>
 			<number_charcombatabilitymod name="fortitudestatmod2" source="saves.fortitude.abilitymod2">
 				<anchored to="fortitudebase" offset="115,0" />
+				<script>
+					function onValueChanged()
+						window.fortitudemisc.secondSave()
+					end
+				</script>
 			</number_charcombatabilitymod>
 			<number_charcombatmod name="fortitudemisc" source="saves.fortitude.misc">
 				<anchored to="fortitudestatmod" />
 				<invisible />
+				<script>
+					function secondSave()
+						local nSecSave = window.fortitudemisc2.getValue() + window.fortitudestatmod2.getValue()
+						setValue(nSecSave)
+					end
+				</script>
 			</number_charcombatmod>
-			<number_charcombatmod name="fortitudemisc2" source="saves.fortitude.misc">
+			<number_charcombatmod name="fortitudemisc2" source="saves.fortitude.misc2">
 				<anchored to="fortitudestatmod2" />
+				<script>
+					function onValueChanged()
+						window.fortitudemisc.secondSave()
+					end
+				</script>
 			</number_charcombatmod>
 
 			<number_charcombatmod name="reflexbase" source="saves.reflex.base">
@@ -80,19 +98,37 @@
 			</number_charcombatabilitymod>
 			<cycler_charcombatability name="reflexstat2">
 				<anchored to="reflexbase" position="aboveright" offset="-112,-20" />
-				<baseability>dexterity</baseability>
+				<baseability>-</baseability>
 				<fieldabilitymod>reflexstatmod2</fieldabilitymod>
 				<source><name>saves.reflex.ability2</name></source>
+				<parameters><defaultlabelres>-</defaultlabelres></parameters>
+				<default></default>
 			</cycler_charcombatability>
 			<number_charcombatabilitymod name="reflexstatmod2" source="saves.reflex.abilitymod2">
 				<anchored to="reflexbase" offset="115,0" />
+				<script>
+					function onValueChanged()
+						window.reflexmisc.secondSave()
+					end
+				</script>
 			</number_charcombatabilitymod>
 			<number_charcombatmod name="reflexmisc" source="saves.reflex.misc">
 				<anchored to="reflexstatmod" />
 				<invisible />
+				<script>
+					function secondSave()
+						local nSecSave = window.reflexmisc2.getValue() + window.reflexstatmod2.getValue()
+						setValue(nSecSave)
+					end
+				</script>
 			</number_charcombatmod>
-			<number_charcombatmod name="reflexmisc2" source="saves.reflex.misc">
+			<number_charcombatmod name="reflexmisc2" source="saves.reflex.misc2">
 				<anchored to="reflexstatmod2" />
+				<script>
+					function onValueChanged()
+						window.reflexmisc.secondSave()
+					end
+				</script>
 			</number_charcombatmod>
 
 			<number_charcombatmod name="willbase" source="saves.will.base">
@@ -109,19 +145,37 @@
 			</number_charcombatabilitymod>
 			<cycler_charcombatability name="willstat2">
 				<anchored to="willbase" position="aboveright" offset="-112,-20" />
-				<baseability>wisdom</baseability>
+				<baseability>-</baseability>
 				<fieldabilitymod>willstatmod2</fieldabilitymod>
 				<source><name>saves.will.ability2</name></source>
+				<parameters><defaultlabelres>-</defaultlabelres></parameters>
+				<default></default>
 			</cycler_charcombatability>
 			<number_charcombatabilitymod name="willstatmod2" source="saves.will.abilitymod2">
 				<anchored to="willbase" offset="115,0" />
+				<script>
+					function onValueChanged()
+						window.willmisc.secondSave()
+					end
+				</script>
 			</number_charcombatabilitymod>
 			<number_charcombatmod name="willmisc" source="saves.will.misc">
 				<anchored to="willstatmod" />
 				<invisible />
+				<script>
+					function secondSave()
+						local nSecSave = window.willmisc2.getValue() + window.willstatmod2.getValue()
+						setValue(nSecSave)
+					end
+				</script>
 			</number_charcombatmod>
-			<number_charcombatmod name="willmisc2" source="saves.will.misc">
+			<number_charcombatmod name="willmisc2" source="saves.will.misc2">
 				<anchored to="willstatmod2" />
+				<script>
+					function onValueChanged()
+						window.willmisc.secondSave()
+					end
+				</script>
 			</number_charcombatmod>
 
 			<label_fieldtop name="savebase_label">
