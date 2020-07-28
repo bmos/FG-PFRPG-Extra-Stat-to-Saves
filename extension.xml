@@ -5,7 +5,7 @@
 		<name>Extra Stat to Saves</name>
 		<version>1.0.0</version>
 		<author>bmos (Wil Thieme)</author>
-		<description><description>
+		<description>none</description>
 		<ruleset>
 			<name>PFRPG</name>
 		</ruleset>
@@ -14,10 +14,12 @@
 		</ruleset>
 	</properties>
 
-	<announcement text="https://github.com/bmos/FG-PFRPG-Item-Durability\nPFRPG Extra Stat to Saves:\n." font="emotefont" />
+	<announcement text="https://github.com/bmos/FG-PFRPG-Item-Durability\nPFRPG Extra Stat to Saves:\n" font="emotefont" />
 
 	<base>
 		<!-- Campaign Records -->
 		<includefile source="campaign/record_char_combat.xml" />
+		<!-- Strings -->
+		<includefile source="strings/strings_char_combat_extrasave.xml" />
 	</base>
 </root>
