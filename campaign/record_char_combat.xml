@@ -73,7 +73,7 @@
 							end
 						end
 						
-						window.fortitudestatmod2effects.updateEffectBonus()
+						window.fortitudestatmod2effects.updateEffectBonuses()
 					end
 				</script>
 			</cycler_ability>
@@ -145,7 +145,7 @@
 							end
 						end
 						
-						window.fortitudestatmod2effects.updateEffectBonus()
+						window.fortitudestatmod2effects.updateEffectBonuses()
 					end
 				</script>
 			</cycler_ability>
@@ -216,7 +216,7 @@
 							end
 						end
 						
-						window.fortitudestatmod2effects.updateEffectBonus()
+						window.fortitudestatmod2effects.updateEffectBonuses()
 					end
 				</script>
 			</cycler_ability>

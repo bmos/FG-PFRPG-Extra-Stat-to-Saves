@@ -6,20 +6,20 @@ function onInit()
 	local node = getDatabaseNode()
 	local nodeCharCT = getNodeCharCT(node)
 
-	DB.addHandler(DB.getPath(nodeCharCT, 'effects.*.label'), 'onUpdate', updateEffectBonus)
-	DB.addHandler(DB.getPath(nodeCharCT, 'effects.*.isactive'), 'onUpdate', updateEffectBonus)
-	DB.addHandler(DB.getPath(nodeCharCT, 'effects'), 'onChildDeleted', updateEffectBonus)
-	DB.addHandler(DB.getPath(node, 'saves.*.ability2'), 'onUpdate', updateEffectBonus)
+	DB.addHandler(DB.getPath(nodeCharCT, 'effects.*.label'), 'onUpdate', updateEffectBonuses)
+	DB.addHandler(DB.getPath(nodeCharCT, 'effects.*.isactive'), 'onUpdate', updateEffectBonuses)
+	DB.addHandler(DB.getPath(nodeCharCT, 'effects'), 'onChildDeleted', updateEffectBonuses)
+	DB.addHandler(DB.getPath(node, 'saves.*.ability2'), 'onUpdate', updateEffectBonuses)
 end
 
 function onClose()
 	local node = getDatabaseNode()
 	local nodeCharCT = getNodeCharCT(node)
 
-	DB.removeHandler(DB.getPath(nodeCharCT, 'effects.*.label'), 'onUpdate', updateEffectBonus)
-	DB.removeHandler(DB.getPath(nodeCharCT, 'effects.*.isactive'), 'onUpdate', updateEffectBonus)
-	DB.removeHandler(DB.getPath(nodeCharCT, 'effects'), 'onChildDeleted', updateEffectBonus)
-	DB.removeHandler(DB.getPath(node, 'saves.*.ability2'), 'onUpdate', updateEffectBonus)
+	DB.removeHandler(DB.getPath(nodeCharCT, 'effects.*.label'), 'onUpdate', updateEffectBonuses)
+	DB.removeHandler(DB.getPath(nodeCharCT, 'effects.*.isactive'), 'onUpdate', updateEffectBonuses)
+	DB.removeHandler(DB.getPath(nodeCharCT, 'effects'), 'onChildDeleted', updateEffectBonuses)
+	DB.removeHandler(DB.getPath(node, 'saves.*.ability2'), 'onUpdate', updateEffectBonuses)
 end
 
 ---	Locate the effects node within the relevant player character's node within combattracker
@@ -36,7 +36,7 @@ function getNodeCharCT(node)
 	return nodeCharCT
 end
 
-function updateEffectBonus()
+function updateEffectBonuses()
 	local rActor = ActorManager.getActor('pc', window.getDatabaseNode())
 
 	local sFort2Stat = string.upper(window.fortitudestat2.getValue())
