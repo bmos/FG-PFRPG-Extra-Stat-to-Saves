@@ -10,6 +10,8 @@ function onInit()
 	DB.addHandler(DB.getPath(nodeCharCT, 'effects.*.isactive'), 'onUpdate', updateEffectBonuses)
 	DB.addHandler(DB.getPath(nodeCharCT, 'effects'), 'onChildDeleted', updateEffectBonuses)
 	DB.addHandler(DB.getPath(node, 'saves.*.ability2'), 'onUpdate', updateEffectBonuses)
+
+	prepPaladin()
 end
 
 function onClose()
@@ -53,4 +55,12 @@ function updateEffectBonuses()
 	window.fortitudemisc.secondSave()
 	window.reflexmisc.secondSave()
 	window.willmisc.secondSave()
+end
+
+function prepPaladin()
+	local nodeChar = getDatabaseNode().getChild('....')
+	local nPalLvl = DB.getValue(CharManager.getClassNode(nodeChar, 'Paladin'), "level")
+	if nPalLvl and nPalLvl >= 2 then
+		
+	end
 end
