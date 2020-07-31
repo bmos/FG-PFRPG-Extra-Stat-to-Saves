@@ -4,24 +4,24 @@
 
 function onInit()
 	local node = getDatabaseNode()
-	local nodeCharCT = getNodeCharCT(node)
+	local nodeCharCT, nodeChar = getNodeCharCT(node)
 
 	DB.addHandler(DB.getPath(nodeCharCT, 'effects.*.label'), 'onUpdate', updateEffectBonuses)
 	DB.addHandler(DB.getPath(nodeCharCT, 'effects.*.isactive'), 'onUpdate', updateEffectBonuses)
 	DB.addHandler(DB.getPath(nodeCharCT, 'effects'), 'onChildDeleted', updateEffectBonuses)
-	DB.addHandler(DB.getPath(node, 'saves.*.ability2'), 'onUpdate', updateEffectBonuses)
-
-	prepPaladin()
+	DB.addHandler(DB.getPath(nodeChar, 'saves.*.ability2'), 'onUpdate', updateEffectBonuses)
+	DB.addHandler(DB.getPath(nodeChar, 'classlevel'), 'onUpdate', prepPaladin)
 end
 
 function onClose()
 	local node = getDatabaseNode()
-	local nodeCharCT = getNodeCharCT(node)
+	local nodeCharCT, nodeChar = getNodeCharCT(node)
 
 	DB.removeHandler(DB.getPath(nodeCharCT, 'effects.*.label'), 'onUpdate', updateEffectBonuses)
 	DB.removeHandler(DB.getPath(nodeCharCT, 'effects.*.isactive'), 'onUpdate', updateEffectBonuses)
 	DB.removeHandler(DB.getPath(nodeCharCT, 'effects'), 'onChildDeleted', updateEffectBonuses)
-	DB.removeHandler(DB.getPath(node, 'saves.*.ability2'), 'onUpdate', updateEffectBonuses)
+	DB.removeHandler(DB.getPath(nodeChar, 'saves.*.ability2'), 'onUpdate', updateEffectBonuses)
+	DB.removeHandler(DB.getPath(nodeChar, 'classlevel'), 'onUpdate', prepPaladin)
 end
 
 ---	Locate the effects node within the relevant player character's node within combattracker
@@ -33,9 +33,10 @@ function getNodeCharCT(node)
 	if node.getChild('.....').getName() == 'charsheet' then
 		rActor = ActorManager.getActor('pc', node.getChild('....'))
 		nodeCharCT = DB.findNode(rActor['sCTNode'])
+		nodeChar = node.getChild('....')
 	end
 
-	return nodeCharCT
+	return nodeCharCT, nodeChar
 end
 
 function updateEffectBonuses()
@@ -57,10 +58,20 @@ function updateEffectBonuses()
 	window.willmisc.secondSave()
 end
 
+---	This function auto-sets the second ability stat for each save to Charisma for lvl2+ Paladins.
 function prepPaladin()
 	local nodeChar = getDatabaseNode().getChild('....')
 	local nPalLvl = DB.getValue(CharManager.getClassNode(nodeChar, 'Paladin'), "level")
+
 	if nPalLvl and nPalLvl >= 2 then
-		
+		local sFort2Stat = DB.getValue(nodeChar, 'saves.fortitude.ability2')
+		local sRef2Stat = DB.getValue(nodeChar, 'saves.reflex.ability2')
+		local sWill2Stat = DB.getValue(nodeChar, 'saves.will.ability2')
+
+		if not sFort2Stat or sFort2Stat == '' then DB.setValue(nodeChar, 'saves.fortitude.ability2', 'string', 'charisma') end
+		if not sRef2Stat or sRef2Stat == '' then DB.setValue(nodeChar, 'saves.reflex.ability2', 'string', 'charisma') end
+		if not sWill2Stat or sWill2Stat == '' then DB.setValue(nodeChar, 'saves.will.ability2', 'string', 'charisma') end
+
+		window.fortitudestatmod2effects.updateEffectBonuses()
 	end
 end
