@@ -4,7 +4,6 @@
 
 <root>
 	<windowclass name="charsheet_combat" merge="join">
-		<script file="campaign/scripts/char_combat.lua" />
 		<sheetdata>
 			<!-- Defenses - Saves -->
 			<frame_char name="saveframe">
