@@ -3,8 +3,7 @@
 --
 
 function onInit()
-	local node = getDatabaseNode()
-	local nodeCharCT, nodeChar = getNodeCharCT(node)
+	local nodeCharCT, nodeChar = getNodeCharCT(getDatabaseNode())
 
 	DB.addHandler(DB.getPath(nodeCharCT, 'effects.*.label'), 'onUpdate', updateEffectBonuses)
 	DB.addHandler(DB.getPath(nodeCharCT, 'effects.*.isactive'), 'onUpdate', updateEffectBonuses)
@@ -14,8 +13,7 @@ function onInit()
 end
 
 function onClose()
-	local node = getDatabaseNode()
-	local nodeCharCT, nodeChar = getNodeCharCT(node)
+	local nodeCharCT, nodeChar = getNodeCharCT(getDatabaseNode())
 
 	DB.removeHandler(DB.getPath(nodeCharCT, 'effects.*.label'), 'onUpdate', updateEffectBonuses)
 	DB.removeHandler(DB.getPath(nodeCharCT, 'effects.*.isactive'), 'onUpdate', updateEffectBonuses)
@@ -53,9 +51,9 @@ function updateEffectBonuses()
 	window.reflexstatmod2effects.setValue(nRef2EB)
 	window.willstatmod2effects.setValue(nWill2EB)
 
-	window.fortitudemisc.secondSave()
-	window.reflexmisc.secondSave()
-	window.willmisc.secondSave()
+	window.fortitudemisc.onValueChanged()
+	window.reflexmisc.onValueChanged()
+	window.willmisc.onValueChanged()
 end
 
 ---	This function auto-sets the second ability stat for each save to Charisma for lvl2+ Paladins.

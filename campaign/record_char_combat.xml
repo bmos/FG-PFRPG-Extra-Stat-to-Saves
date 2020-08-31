@@ -47,7 +47,7 @@
 				<anchored to="fortitudebase" offset="115,0" />
 				<script>
 					function onValueChanged()
-						window.fortitudemisc.secondSave()
+						window.fortitudemisc.onValueChanged()
 					end
 				</script>
 			</number_charcombatabilitymod>
@@ -60,7 +60,7 @@
 				<anchored to="fortitudestatmod" />
 				<invisible />
 				<script>
-					function secondSave()
+					function onValueChanged()
 						local nSecSave = window.fortitudemisc2.getValue() + window.fortitudestatmod2.getValue() + window.fortitudestatmod2effects.getValue()
 						setValue(nSecSave)
 					end
@@ -70,7 +70,7 @@
 				<anchored to="fortitudestatmod2" />
 				<script>
 					function onValueChanged()
-						window.fortitudemisc.secondSave()
+						window.fortitudemisc.onValueChanged()
 					end
 				</script>
 			</number_charcombatmod>
@@ -110,7 +110,7 @@
 				<anchored to="reflexbase" offset="115,0" />
 				<script>
 					function onValueChanged()
-						window.reflexmisc.secondSave()
+						window.reflexmisc.onValueChanged()
 					end
 				</script>
 			</number_charcombatabilitymod>
@@ -122,7 +122,7 @@
 				<anchored to="reflexstatmod" />
 				<invisible />
 				<script>
-					function secondSave()
+					function onValueChanged()
 						local nSecSave = window.reflexmisc2.getValue() + window.reflexstatmod2.getValue() + window.reflexstatmod2effects.getValue()
 						setValue(nSecSave)
 					end
@@ -132,7 +132,7 @@
 				<anchored to="reflexstatmod2" />
 				<script>
 					function onValueChanged()
-						window.reflexmisc.secondSave()
+						window.reflexmisc.onValueChanged()
 					end
 				</script>
 			</number_charcombatmod>
@@ -172,7 +172,7 @@
 				<anchored to="willbase" offset="115,0" />
 				<script>
 					function onValueChanged()
-						window.willmisc.secondSave()
+						window.willmisc.onValueChanged()
 					end
 				</script>
 			</number_charcombatabilitymod>
@@ -184,7 +184,7 @@
 				<anchored to="willstatmod" />
 				<invisible />
 				<script>
-					function secondSave()
+					function onValueChanged()
 						local nSecSave = window.willmisc2.getValue() + window.willstatmod2.getValue() + window.willstatmod2effects.getValue()
 						setValue(nSecSave)
 					end
@@ -194,7 +194,7 @@
 				<anchored to="willstatmod2" />
 				<script>
 					function onValueChanged()
-						window.willmisc.secondSave()
+						window.willmisc.onValueChanged()
 					end
 				</script>
 			</number_charcombatmod>
