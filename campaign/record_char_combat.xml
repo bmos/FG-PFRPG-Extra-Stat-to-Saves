@@ -5,49 +5,16 @@
 <root>
 	<windowclass name="charsheet_combat" merge="join">
 		<sheetdata>
-			<!-- Defenses - Saves -->
-			<frame_char name="saveframe">
-				<bounds>15,210,350,120</bounds>
-			</frame_char>
-
 			<number_charsavefort name="fortitude" source="saves.fortitude.total">
-				<anchored to="saveframe" position="insidetopleft" offset="83,28" width="32" height="20" />
+				<anchored offset="83,28"/>
 			</number_charsavefort>
 			<label name="fortitude_label">
-				<anchored to="saveframe" position="insidetopleft" offset="20,28" width="80" />
-				<static textres="fortitude" />
+				<anchored offset="20,28"/>
 			</label>
-			<number_charsaveref name="reflex" source="saves.reflex.total">
-				<anchored to="fortitude" position="belowleft" offset="0,8" width="32" height="20" />
-			</number_charsaveref>
-			<label name="reflex_label">
-				<anchored to="fortitude_label" position="belowleft" offset="0,8" width="80" />
-				<static textres="reflex" />
-			</label>
-			<number_charsavewill name="will" source="saves.will.total">
-				<anchored to="reflex" position="belowleft" offset="0,8" width="32" height="20" />
-			</number_charsavewill>
-			<label name="will_label">
-				<anchored to="reflex_label" position="belowleft" offset="0,8" width="80" />
-				<static textres="will_long" />
-			</label>
-			<label_fieldtop name="savettotal_label">
-				<anchored to="fortitude" />
-				<static textres="char_label_combattotal" />
-			</label_fieldtop>
 
 			<number_charcombatmod name="fortitudebase" source="saves.fortitude.base">
 				<anchored to="fortitude" offset="7,0" />
 			</number_charcombatmod>
-			<cycler_charcombatability name="fortitudestat">
-				<anchored to="fortitudebase" />
-				<baseability>constitution</baseability>
-				<fieldabilitymod>fortitudestatmod</fieldabilitymod>
-				<source><name>saves.fortitude.ability</name></source>
-			</cycler_charcombatability>
-			<number_charcombatabilitymod name="fortitudestatmod" source="saves.fortitude.abilitymod">
-				<anchored to="fortitudebase" offset="48,0" />
-			</number_charcombatabilitymod>
 			<cycler_ability name="fortitudestat2">
 				<anchored to="fortitudebase" position="aboveright" offset="-112,-20" height="20" width="32" />
 				<baseability>-</baseability>
@@ -111,15 +78,6 @@
 			<number_charcombatmod name="reflexbase" source="saves.reflex.base">
 				<anchored to="reflex" offset="7,0" />
 			</number_charcombatmod>
-			<cycler_charcombatability name="reflexstat">
-				<anchored to="reflexbase" />
-				<baseability>dexterity</baseability>
-				<fieldabilitymod>reflexstatmod</fieldabilitymod>
-				<source><name>saves.reflex.ability</name></source>
-			</cycler_charcombatability>
-			<number_charcombatabilitymod name="reflexstatmod" source="saves.reflex.abilitymod">
-				<anchored to="reflexbase" offset="48,0" />
-			</number_charcombatabilitymod>
 			<cycler_ability name="reflexstat2">
 				<anchored to="reflexbase" position="aboveright" offset="-112,-20" height="20" width="32" />
 				<baseability>-</baseability>
@@ -182,15 +140,6 @@
 			<number_charcombatmod name="willbase" source="saves.will.base">
 				<anchored to="will" offset="7,0" />
 			</number_charcombatmod>
-			<cycler_charcombatability name="willstat">
-				<anchored to="willbase" />
-				<baseability>wisdom</baseability>
-				<fieldabilitymod>willstatmod</fieldabilitymod>
-				<source><name>saves.will.ability</name></source>
-			</cycler_charcombatability>
-			<number_charcombatabilitymod name="willstatmod" source="saves.will.abilitymod">
-				<anchored to="willbase" offset="48,0" />
-			</number_charcombatabilitymod>
 			<cycler_ability name="willstat2">
 				<anchored to="willbase" position="aboveright" offset="-112,-20" height="20" width="32" />
 				<baseability>-</baseability>
@@ -250,16 +199,6 @@
 				</script>
 			</number_charcombatmod>
 
-			<label_fieldtop name="savebase_label">
-				<anchored to="fortitudebase" />
-				<static textres="char_label_combatsaveclass" />
-			</label_fieldtop>
-			<label_fieldtop name="savestatmod_label">
-				<anchored to="fortitudestatmod">
-					<left parent="fortitudestat" />
-				</anchored>
-				<static textres="char_label_combatability" />
-			</label_fieldtop>
 			<label_fieldtop name="savestatmod2_label">
 				<anchored to="fortitudestatmod2">
 					<left parent="fortitudestat2" />
@@ -268,7 +207,6 @@
 			</label_fieldtop>
 			<label_fieldtop name="savemisc_label">
 				<anchored to="fortitudemisc" position="aboveright" offset="-92,1" />
-				<static textres="char_label_combatmisc" />
 			</label_fieldtop>
 		</sheetdata>
 	</windowclass>
