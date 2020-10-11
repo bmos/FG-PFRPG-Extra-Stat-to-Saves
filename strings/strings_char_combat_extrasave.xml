@@ -5,4 +5,6 @@
 <root>
 	<!-- Labels -->
 	<string name="char_label_combatability2">2nd Stat</string>
+	<!-- Chat Messages -->
+	<string name="char_message_paladinsecondsave">Charisma bonus to saving throws added to '%s'.</string>
 </root>

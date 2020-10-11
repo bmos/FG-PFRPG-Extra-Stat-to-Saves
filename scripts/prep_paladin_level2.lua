@@ -19,5 +19,9 @@ function prepPaladin(nodeClassLevel)
 		if not sFort2Stat or sFort2Stat == '' then DB.setValue(nodeChar, 'saves.fortitude.ability2', 'string', 'charisma') end
 		if not sRef2Stat or sRef2Stat == '' then DB.setValue(nodeChar, 'saves.reflex.ability2', 'string', 'charisma') end
 		if not sWill2Stat or sWill2Stat == '' then DB.setValue(nodeChar, 'saves.will.ability2', 'string', 'charisma') end
+		
+		local sFormat = Interface.getString("char_message_paladinsecondsave");
+		local sMsg = string.format(sFormat, DB.getValue(nodeChar, "name", ""));
+		ChatManager.SystemMessage(sMsg);
 	end
 end
