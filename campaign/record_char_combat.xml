@@ -38,8 +38,6 @@
 								window[fieldabilitymod[1]].updateAbility(sCharRelative, sValue);
 							end
 						end
-						
-						window.fortitudestatmod2effects.updateEffectBonuses()
 					end
 				</script>
 			</cycler_ability>
@@ -51,18 +49,12 @@
 					end
 				</script>
 			</number_charcombatabilitymod>
-			<number_charcombatmod name="fortitudestatmod2effects" source="saves.fortitude.abilitymod2e">
-				<anchored to="fortitudestatmod2" />
-				<invisible />
-				<script file="campaign/scripts/abilitymod2_effects.lua"/>
-			</number_charcombatmod>
 			<number_charcombatmod name="fortitudemisc" source="saves.fortitude.misc">
 				<anchored to="fortitudestatmod" />
 				<invisible />
 				<script>
 					function onValueChanged()
-						local nSecSave = window.fortitudemisc2.getValue() + window.fortitudestatmod2.getValue() + window.fortitudestatmod2effects.getValue()
-						setValue(nSecSave)
+						setValue(window.fortitudemisc2.getValue() + window.fortitudestatmod2.getValue())
 					end
 				</script>
 			</number_charcombatmod>
@@ -101,8 +93,6 @@
 								window[fieldabilitymod[1]].updateAbility(sCharRelative, sValue);
 							end
 						end
-						
-						window.fortitudestatmod2effects.updateEffectBonuses()
 					end
 				</script>
 			</cycler_ability>
@@ -114,17 +104,12 @@
 					end
 				</script>
 			</number_charcombatabilitymod>
-			<number_charcombatmod name="reflexstatmod2effects" source="saves.reflex.abilitymod2e">
-				<anchored to="reflexstatmod2" />
-				<invisible />
-			</number_charcombatmod>
 			<number_charcombatmod name="reflexmisc" source="saves.reflex.misc">
 				<anchored to="reflexstatmod" />
 				<invisible />
 				<script>
 					function onValueChanged()
-						local nSecSave = window.reflexmisc2.getValue() + window.reflexstatmod2.getValue() + window.reflexstatmod2effects.getValue()
-						setValue(nSecSave)
+						setValue(window.reflexmisc2.getValue() + window.reflexstatmod2.getValue())
 					end
 				</script>
 			</number_charcombatmod>
@@ -163,8 +148,6 @@
 								window[fieldabilitymod[1]].updateAbility(sCharRelative, sValue);
 							end
 						end
-						
-						window.fortitudestatmod2effects.updateEffectBonuses()
 					end
 				</script>
 			</cycler_ability>
@@ -176,17 +159,12 @@
 					end
 				</script>
 			</number_charcombatabilitymod>
-			<number_charcombatmod name="willstatmod2effects" source="saves.will.abilitymod2e">
-				<anchored to="willstatmod2" />
-				<invisible />
-			</number_charcombatmod>
 			<number_charcombatmod name="willmisc" source="saves.will.misc">
 				<anchored to="willstatmod" />
 				<invisible />
 				<script>
 					function onValueChanged()
-						local nSecSave = window.willmisc2.getValue() + window.willstatmod2.getValue() + window.willstatmod2effects.getValue()
-						setValue(nSecSave)
+						setValue(window.willmisc2.getValue() + window.willstatmod2.getValue())
 					end
 				</script>
 			</number_charcombatmod>
