@@ -3,6 +3,7 @@
 --
 
 local getRoll_old = nil
+local modSave_old = nil
 
 -- Function Overrides
 function onInit()
