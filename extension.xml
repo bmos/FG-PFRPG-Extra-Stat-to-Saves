@@ -2,7 +2,7 @@
 <root version="3.3" release="3">
 	<!-- Please see the LICENSE.md file included with this distribution for attribution and copyright information. -->
 	<properties>
-		<loadorder>41</loadorder>
+		<loadorder>30</loadorder>
 		<name>Extra Stat to Saves</name>
 		<version>2.0</version>
 		<author>bmos (Wil Thieme)</author>
@@ -23,7 +23,7 @@
 		<!-- Strings -->
 		<includefile source="strings/strings_char_combat_extrasave.xml" />
 		<!-- Scripts -->
-		<script name="ActionSave" file="scripts/manager_action_save_EStS.lua" />
+		<script name="ActionSaveEStS" file="scripts/manager_action_save_EStS.lua" />
 		<script name="PrepPaladin" file="scripts/prep_paladin_level2.lua" />
 	</base>
 </root>

@@ -2,151 +2,51 @@
 -- Please see the LICENSE.md file included with this distribution for attribution and copyright information.
 --
 
-OOB_MSGTYPE_APPLYSAVE = "applysave";
+local getRoll_old = nil
 
+-- Function Overrides
 function onInit()
-	OOBManager.registerOOBMsgHandler(OOB_MSGTYPE_APPLYSAVE, handleApplySave);
+	getRoll_old = ActionSave.getRoll;
+	ActionSave.getRoll = getRoll_new;
+	modSave_old = ActionSave.modSave;
+	ActionSave.modSave = modSave_new;
 
-	ActionsManager.registerModHandler("save", modSave);
-	ActionsManager.registerResultHandler("save", onSave);
+	ActionsManager.unregisterModHandler("save");
+	ActionsManager.registerModHandler("save", modSave_new);
 end
 
-function handleApplySave(msgOOB)
-	local rSource = ActorManager.getActor(msgOOB.sSourceType, msgOOB.sSourceNode);
-	local rOrigin = ActorManager.getActor(msgOOB.sTargetType, msgOOB.sTargetNode);
-	
-	local rAction = {};
-	rAction.bSecret = (tonumber(msgOOB.nSecret) == 1);
-	rAction.sDesc = msgOOB.sDesc;
-	rAction.nTotal = tonumber(msgOOB.nTotal) or 0;
-	rAction.sSaveDesc = msgOOB.sSaveDesc;
-	rAction.nTarget = tonumber(msgOOB.nTarget) or 0;
-	rAction.bRemoveOnMiss = (tonumber(msgOOB.nRemoveOnMiss) == 1);
-	rAction.sSaveResult = msgOOB.sSaveResult;
-	
-	applySave(rSource, rOrigin, rAction);
+function onClose()
+	ActionSave.getRoll = getRoll_old;
+	ActionSave.modSave = modSave_old;
 end
 
-function notifyApplySave(rSource, rRoll)
-	local msgOOB = {};
-	msgOOB.type = OOB_MSGTYPE_APPLYSAVE;
-	
-	if rRoll.bTower then
-		msgOOB.nSecret = 1;
-	else
-		msgOOB.nSecret = 0;
-	end
-	msgOOB.sDesc = rRoll.sDesc;
-	msgOOB.nTotal = ActionsManager.total(rRoll);
-	msgOOB.sSaveDesc = rRoll.sSaveDesc;
-	msgOOB.nTarget = rRoll.nTarget;
-	msgOOB.sSaveResult = rRoll.sSaveResult;
-	if rRoll.bRemoveOnMiss then msgOOB.nRemoveOnMiss = 1; end
-
-	local sSourceType, sSourceNode = ActorManager.getTypeAndNodeName(rSource);
-	msgOOB.sSourceType = sSourceType;
-	msgOOB.sSourceNode = sSourceNode;
-
-	if rRoll.sSource ~= "" then
-		msgOOB.sTargetType = "ct";
-		msgOOB.sTargetNode = rRoll.sSource;
-	else
-		msgOOB.sTargetType = "";
-		msgOOB.sTargetNode = "";
-	end
-	
-	Comm.deliverOOBMessage(msgOOB, "");
-end
-
-function performPartySheetRoll(draginfo, rActor, sSave)
-	local rRoll = getRoll(rActor, sSave);
-	
-	local nTargetDC = DB.getValue("partysheet.savedc", 0);
-	if nTargetDC == 0 then
-		nTargetDC = nil;
-	end
-	rRoll.nTarget = nTargetDC;
-	if DB.getValue("partysheet.hiderollresults", 0) == 1 then
-		rRoll.bSecret = true;
-		rRoll.bTower = true;
-	end
-
-	ActionsManager.performAction(draginfo, rActor, rRoll);
-end
-
-function performVsRoll(draginfo, rActor, sSave, nTargetDC, bSecretRoll, rSource, bRemoveOnMiss, sSaveDesc)
-	local rRoll = getRoll(rActor, sSave);
-
-	if bSecretRoll then
-		rRoll.bSecret = true;
-	end
-	rRoll.nTarget = nTargetDC;
-	if bRemoveOnMiss then
-		rRoll.bRemoveOnMiss = "true";
-	end
-	if sSaveDesc then
-		rRoll.sSaveDesc = sSaveDesc;
-	end
-	if rSource then
-		rRoll.sSource = ActorManager.getCTNodeName(rSource);
-	end
-	rRoll.bVsSave = true;
-
-	ActionsManager.performAction(draginfo, rActor, rRoll);
-end
-
-function performRoll(draginfo, rActor, sSave)
-	local rRoll = getRoll(rActor, sSave);
-	
-	if User.isHost() and CombatManager.isCTHidden(ActorManager.getCTNode(rActor)) then
-		rRoll.bSecret = true;
-	end
-
-	ActionsManager.performAction(draginfo, rActor, rRoll);
-end
-
-function getRoll(rActor, sSave)
-	local rRoll = {};
-	rRoll.sType = "save";
-	rRoll.aDice = { "d20" };
-	rRoll.nMod = 0;
-	
-	-- Look up actor specific information
-	local sAbility = nil;
-	local sAbility2 = nil; -- bmos adding second save ability
+function getRoll_new(rActor, sSave)
+	local rRoll = getRoll_old(rActor, sSave); -- inheret output of previously-loaded getRoll function
 	local sActorType, nodeActor = ActorManager.getTypeAndNode(rActor);
-	if nodeActor then
-		if sActorType == "pc" then
-			rRoll.nMod = DB.getValue(nodeActor, "saves." .. sSave .. ".total", 0);
-			sAbility = DB.getValue(nodeActor, "saves." .. sSave .. ".ability", "");
-			sAbility2 = DB.getValue(nodeActor, "saves." .. sSave .. ".ability2", ""); -- bmos adding second save ability
-		else
-			rRoll.nMod = DB.getValue(nodeActor, sSave .. "save", 0);
-		end
+	local sAbility2 = nil;
+	if nodeActor and sActorType == "pc" then
+		sAbility2 = DB.getValue(nodeActor, "saves." .. sSave .. ".ability2", ""); -- bmos adding second save ability
 	end
 
-	rRoll.sDesc = "[SAVE] " .. StringManager.capitalize(sSave);
-	if sAbility and sAbility ~= "" then
-		if (sSave == "fortitude" and sAbility ~= "constitution") or
-				(sSave == "reflex" and sAbility ~= "dexterity") or
-				(sSave == "will" and sAbility ~= "wisdom") then
-			local sAbilityEffect = DataCommon.ability_ltos[sAbility];
-			if sAbilityEffect then
-				rRoll.sDesc = rRoll.sDesc .. " [MOD:" .. sAbilityEffect .. "]";
-			end
-		end
-	end
-	if sAbility2 and sAbility2 ~= "" then -- bmos adding extra save mod
+	if sAbility2 and sAbility2 ~= "" then
 		local sAbilityEffect2 = DataCommon.ability_ltos[sAbility2];
 		if sAbilityEffect2 then
-			rRoll.sDesc = rRoll.sDesc .. " [EXTRA MOD:" .. sAbilityEffect2 .. "]";
+			rRoll.sDesc = rRoll.sDesc .. " [EXTRA MOD:" .. sAbilityEffect2 .. "]"; -- bmos adding extra save mod to roll
 		end
 	end
 	
 	return rRoll;
 end
 
-function modSave(rSource, rTarget, rRoll)
+local function isUsingKelSV()
+	return (StringManager.contains(Extension.getExtensions(), "Save versus tags") or
+			StringManager.contains(Extension.getExtensions(), "Full OverlayPackage") or
+			StringManager.contains(Extension.getExtensions(), "Full OverlayPackage with alternative icons"));
+end
+
+-- it seems I must override this function completely
+-- I have included checks to ensure compatibility with Kelrugem's Save Versus Tags 
+function modSave_new(rSource, rTarget, rRoll)
 	local aAddDesc = {};
 	local aAddDice = {};
 	local nAddMod = 0;
@@ -196,14 +96,23 @@ function modSave(rSource, rTarget, rRoll)
 		elseif EffectManager35E.hasEffect(rSource, "Flat-footed") or EffectManager35E.hasEffect(rSource, "Flatfooted") then
 			bFlatfooted = true;
 		end
-
+		
 		-- Get effect modifiers
 		local rSaveSource = nil;
 		if rRoll.sSource then
 			rSaveSource = ActorManager.getActor("ct", rRoll.sSource);
 		end
 		local aExistingBonusByType = {};
-		local aSaveEffects = EffectManager35E.getEffectsByType(rSource, "SAVE", aSaveFilter, rSaveSource, false);
+		
+		-- KEL Adding tag information
+		local sEffectSpell = rRoll.tags;
+		local aSaveEffects = {}
+		if isUsingKelSV() then
+			aSaveEffects = EffectManager35E.getEffectsByType(rSource, "SAVE", aSaveFilter, rSaveSource, false, sEffectSpell);
+		else
+			aSaveEffects = EffectManager35E.getEffectsByType(rSource, "SAVE", aSaveFilter, rSaveSource, false);
+		end
+		
 		for _,v in pairs(aSaveEffects) do
 			-- Determine bonus type if any
 			local sBonusType = nil;
@@ -305,134 +214,4 @@ function modSave(rSource, rTarget, rRoll)
 		end
 	end
 	rRoll.nMod = rRoll.nMod + nAddMod;
-end
-
-function onSave(rSource, rTarget, rRoll)
-	local rMessage = ActionsManager.createActionMessage(rSource, rRoll);
-	Comm.deliverChatMessage(rMessage);
-	
-	if rRoll.nTarget then
-		rRoll.nTotal = ActionsManager.total(rRoll);
-		if #(rRoll.aDice) > 0 then
-			local nFirstDie = rRoll.aDice[1].result or 0;
-			if nFirstDie == 20 then
-				rRoll.sSaveResult = "autosuccess";
-			elseif nFirstDie == 1 then
-				rRoll.sSaveResult = "autofailure";
-			end
-		end
-		if (rRoll.sSaveResult or "") == "" then
-			local nTarget = tonumber(rRoll.nTarget) or 0;
-			if rRoll.nTotal >= nTarget then
-				rRoll.sSaveResult = "success";
-			else
-				rRoll.sSaveResult = "failure";
-			end
-		end
-		notifyApplySave(rSource, rRoll);
-	end
-end
-
-	
-function applySave(rSource, rOrigin, rAction, sUser)
-	local msgShort = {font = "msgfont"};
-	local msgLong = {font = "msgfont"};
-	
-	msgShort.text = "Save";
-	msgLong.text = "Save [" .. rAction.nTotal ..  "]";
-	if rAction.nTarget then
-		msgLong.text = msgLong.text .. "[vs. DC " .. rAction.nTarget .. "]";
-	end
-	msgShort.text = msgShort.text .. " ->";
-	msgLong.text = msgLong.text .. " ->";
-	if rSource then
-		msgShort.text = msgShort.text .. " [for " .. ActorManager.getDisplayName(rSource) .. "]";
-		msgLong.text = msgLong.text .. " [for " .. ActorManager.getDisplayName(rSource) .. "]";
-	end
-	if rOrigin then
-		msgShort.text = msgShort.text .. " [vs " .. ActorManager.getDisplayName(rOrigin) .. "]";
-		msgLong.text = msgLong.text .. " [vs " .. ActorManager.getDisplayName(rOrigin) .. "]";
-	end
-	
-	msgShort.icon = "roll_cast";
-		
-	local sAttack = "";
-	local bHalfMatch = false;
-	if rAction.sSaveDesc then
-		sAttack = rAction.sSaveDesc:match("%[SAVE VS[^]]*%] ([^[]+)") or "";
-		bHalfMatch = (rAction.sSaveDesc:match("%[HALF ON SAVE%]") ~= nil);
-	end
-	rAction.sResult = "";
-	
-	if rAction.sSaveResult == "autosuccess" or rAction.sSaveResult == "success" then
-		if rAction.sSaveResult == "autosuccess" then
-			msgLong.text = msgLong.text .. " [AUTOMATIC SUCCESS]";
-		else
-			msgLong.text = msgLong.text .. " [SUCCESS]";
-		end
-		
-		if rSource then
-			local bHalfDamage = bHalfMatch;
-			local bAvoidDamage = false;
-			if bHalfDamage then
-				local sSave = rAction.sDesc:match("%[SAVE%] (%w+)");
-				if sSave then
-					sSave = sSave:lower();
-				end
-				if sSave == "reflex" then
-					if EffectManager35E.hasEffectCondition(rSource, "Improved Evasion") then 
-						bAvoidDamage = true;
-						msgLong.text = msgLong.text .. " [IMPROVED EVASION]";
-					elseif EffectManager35E.hasEffectCondition(rSource, "Evasion") then
-						bAvoidDamage = true;
-						msgLong.text = msgLong.text .. " [EVASION]";
-					end
-				end
-			end
-			
-			if bAvoidDamage then
-				rAction.sResult = "none";
-				rAction.bRemoveOnMiss = false;
-			elseif bHalfDamage then
-				rAction.sResult = "half_success";
-				rAction.bRemoveOnMiss = false;
-			end
-			
-			if rOrigin and rAction.bRemoveOnMiss then
-				TargetingManager.removeTarget(ActorManager.getCTNodeName(rOrigin), ActorManager.getCTNodeName(rSource));
-			end
-		end
-	else
-		if rAction.sSaveResult == "autofailure" then
-			msgLong.text = msgLong.text .. " [AUTOMATIC FAILURE]";
-		else
-			msgLong.text = msgLong.text .. " [FAILURE]";
-		end
-
-		if rSource then
-			local bHalfDamage = false;
-			if bHalfMatch then
-				local sSave = rAction.sDesc:match("%[SAVE%] (%w+)");
-				if sSave then
-					sSave = sSave:lower();
-				end
-				if sSave == "reflex" then
-					if EffectManager35E.hasEffectCondition(rSource, "Improved Evasion") then
-						bHalfDamage = true;
-						msgLong.text = msgLong.text .. " [IMPROVED EVASION]";
-					end
-				end
-			end
-			
-			if bHalfDamage then
-				rAction.sResult = "half_failure";
-			end
-		end
-	end
-	
-	ActionsManager.outputResult(rAction.bSecret, rSource, rOrigin, msgLong, msgShort);
-	
-	if rSource and rOrigin then
-		ActionDamage.setDamageState(rOrigin, rSource, StringManager.trim(sAttack), rAction.sResult);
-	end
 end
