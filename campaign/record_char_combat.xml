@@ -6,18 +6,14 @@
 	<windowclass name="charsheet_combat" merge="join">
 		<sheetdata>
 			<number_charsavefort name="fortitude" source="saves.fortitude.total">
-				<anchored offset="83,28"/>
+				<anchored offset="90,28"/>
 			</number_charsavefort>
-			<label name="fortitude_label">
-				<anchored offset="20,28"/>
-			</label>
 
 			<number_charcombatmod name="fortitudebase" source="saves.fortitude.base">
 				<anchored to="fortitude" offset="7,0" />
 			</number_charcombatmod>
 			<cycler_ability name="fortitudestat2">
 				<anchored to="fortitudebase" position="aboveright" offset="-112,-20" height="20" width="32" />
-				<baseability>-</baseability>
 				<fieldabilitymod>fortitudestatmod2</fieldabilitymod>
 				<source><name>saves.fortitude.ability2</name></source>
 				<parameters><defaultlabelres>-</defaultlabelres></parameters>
@@ -43,28 +39,9 @@
 			</cycler_ability>
 			<number_charcombatabilitymod name="fortitudestatmod2" source="saves.fortitude.abilitymod2">
 				<anchored to="fortitudebase" offset="115,0" />
-				<script>
-					function onValueChanged()
-						window.fortitudemisc.onValueChanged()
-					end
-				</script>
 			</number_charcombatabilitymod>
 			<number_charcombatmod name="fortitudemisc" source="saves.fortitude.misc">
-				<anchored to="fortitudestatmod" />
-				<invisible />
-				<script>
-					function onValueChanged()
-						setValue(window.fortitudemisc2.getValue() + window.fortitudestatmod2.getValue())
-					end
-				</script>
-			</number_charcombatmod>
-			<number_charcombatmod name="fortitudemisc2" source="saves.fortitude.misc2">
-				<anchored to="fortitudestatmod2" />
-				<script>
-					function onValueChanged()
-						window.fortitudemisc.onValueChanged()
-					end
-				</script>
+				<anchored to="fortitudestatmod" offset="70" width="20" />
 			</number_charcombatmod>
 
 			<number_charcombatmod name="reflexbase" source="saves.reflex.base">
@@ -72,7 +49,6 @@
 			</number_charcombatmod>
 			<cycler_ability name="reflexstat2">
 				<anchored to="reflexbase" position="aboveright" offset="-112,-20" height="20" width="32" />
-				<baseability>-</baseability>
 				<fieldabilitymod>reflexstatmod2</fieldabilitymod>
 				<source><name>saves.reflex.ability2</name></source>
 				<parameters><defaultlabelres>-</defaultlabelres></parameters>
@@ -98,28 +74,9 @@
 			</cycler_ability>
 			<number_charcombatabilitymod name="reflexstatmod2" source="saves.reflex.abilitymod2">
 				<anchored to="reflexbase" offset="115,0" />
-				<script>
-					function onValueChanged()
-						window.reflexmisc.onValueChanged()
-					end
-				</script>
 			</number_charcombatabilitymod>
 			<number_charcombatmod name="reflexmisc" source="saves.reflex.misc">
-				<anchored to="reflexstatmod" />
-				<invisible />
-				<script>
-					function onValueChanged()
-						setValue(window.reflexmisc2.getValue() + window.reflexstatmod2.getValue())
-					end
-				</script>
-			</number_charcombatmod>
-			<number_charcombatmod name="reflexmisc2" source="saves.reflex.misc2">
-				<anchored to="reflexstatmod2" />
-				<script>
-					function onValueChanged()
-						window.reflexmisc.onValueChanged()
-					end
-				</script>
+				<anchored to="reflexstatmod" offset="70" width="20" />
 			</number_charcombatmod>
 
 			<number_charcombatmod name="willbase" source="saves.will.base">
@@ -127,7 +84,6 @@
 			</number_charcombatmod>
 			<cycler_ability name="willstat2">
 				<anchored to="willbase" position="aboveright" offset="-112,-20" height="20" width="32" />
-				<baseability>-</baseability>
 				<fieldabilitymod>willstatmod2</fieldabilitymod>
 				<source><name>saves.will.ability2</name></source>
 				<parameters><defaultlabelres>-</defaultlabelres></parameters>
@@ -153,28 +109,9 @@
 			</cycler_ability>
 			<number_charcombatabilitymod name="willstatmod2" source="saves.will.abilitymod2">
 				<anchored to="willbase" offset="115,0" />
-				<script>
-					function onValueChanged()
-						window.willmisc.onValueChanged()
-					end
-				</script>
 			</number_charcombatabilitymod>
 			<number_charcombatmod name="willmisc" source="saves.will.misc">
-				<anchored to="willstatmod" />
-				<invisible />
-				<script>
-					function onValueChanged()
-						setValue(window.willmisc2.getValue() + window.willstatmod2.getValue())
-					end
-				</script>
-			</number_charcombatmod>
-			<number_charcombatmod name="willmisc2" source="saves.will.misc2">
-				<anchored to="willstatmod2" />
-				<script>
-					function onValueChanged()
-						window.willmisc.onValueChanged()
-					end
-				</script>
+				<anchored to="willstatmod" offset="70" width="20" />
 			</number_charcombatmod>
 
 			<label_fieldtop name="savestatmod2_label">
@@ -183,9 +120,31 @@
 				</anchored>
 				<static textres="char_label_combatability2" />
 			</label_fieldtop>
-			<label_fieldtop name="savemisc_label">
-				<anchored to="fortitudemisc" position="aboveright" offset="-92,1" />
-			</label_fieldtop>
 		</sheetdata>
 	</windowclass>
+	
+	<template name="number_charsavefort">
+		<number_charsave>
+			<modifierfield>saves.fortitude.temporary</modifierfield>
+			<target>fortitude</target>
+			<ability><source>saves.fortitude.ability</source><default>constitution</default></ability>
+			<ability><source>saves.fortitude.ability2</source></ability>
+		</number_charsave>
+	</template>
+	<template name="number_charsaveref">
+		<number_charsave>
+			<modifierfield>saves.reflex.temporary</modifierfield>
+			<target>reflex</target>
+			<ability><source>saves.reflex.ability</source><default>dexterity</default></ability>
+			<ability><source>saves.reflex.ability2</source></ability>
+		</number_charsave>
+	</template>
+	<template name="number_charsavewill">
+		<number_charsave>
+			<modifierfield>saves.will.temporary</modifierfield>
+			<target>will</target>
+			<ability><source>saves.will.ability</source><default>wisdom</default></ability>
+			<ability><source>saves.will.ability2</source></ability>
+		</number_charsave>
+	</template>
 </root>
