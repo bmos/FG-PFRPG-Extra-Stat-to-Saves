@@ -42,6 +42,16 @@
 			</number_charcombatabilitymod>
 			<number_charcombatmod name="fortitudemisc" source="saves.fortitude.misc">
 				<anchored to="fortitudestatmod" offset="70" width="20" />
+				<script>
+					function onInit()
+						local nodeAbil = getDatabaseNode().getParent()
+						local nMisc2 = DB.getValue(nodeAbil, 'misc2')
+						if nMisc2 then
+							if nMisc2 ~= 0 then setValue(nMisc2) end
+							DB.deleteChild(nodeAbil, 'misc2')
+						end
+					end
+				</script>
 			</number_charcombatmod>
 
 			<number_charcombatmod name="reflexbase" source="saves.reflex.base">
@@ -77,6 +87,16 @@
 			</number_charcombatabilitymod>
 			<number_charcombatmod name="reflexmisc" source="saves.reflex.misc">
 				<anchored to="reflexstatmod" offset="70" width="20" />
+				<script>
+					function onInit()
+						local nodeAbil = getDatabaseNode().getParent()
+						local nMisc2 = DB.getValue(nodeAbil, 'misc2')
+						if nMisc2 then
+							if nMisc2 ~= 0 then setValue(nMisc2) end
+							DB.deleteChild(nodeAbil, 'misc2')
+						end
+					end
+				</script>
 			</number_charcombatmod>
 
 			<number_charcombatmod name="willbase" source="saves.will.base">
@@ -112,6 +132,16 @@
 			</number_charcombatabilitymod>
 			<number_charcombatmod name="willmisc" source="saves.will.misc">
 				<anchored to="willstatmod" offset="70" width="20" />
+				<script>
+					function onInit()
+						local nodeAbil = getDatabaseNode().getParent()
+						local nMisc2 = DB.getValue(nodeAbil, 'misc2')
+						if nMisc2 then
+							if nMisc2 ~= 0 then setValue(nMisc2) end
+							DB.deleteChild(nodeAbil, 'misc2')
+						end
+					end
+				</script>
 			</number_charcombatmod>
 
 			<label_fieldtop name="savestatmod2_label">
