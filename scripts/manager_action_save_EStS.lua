@@ -45,7 +45,7 @@ local function isUsingKelSV()
 			StringManager.contains(Extension.getExtensions(), "Full OverlayPackage with alternative icons"));
 end
 
--- it seems I must override this function completely
+-- it seems I must override this function completely as it does not return data
 -- I have included checks to ensure compatibility with Kelrugem's Save Versus Tags 
 function modSave_new(rSource, rTarget, rRoll)
 	local aAddDesc = {};
