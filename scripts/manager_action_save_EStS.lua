@@ -23,18 +23,24 @@ end
 
 function getRoll_new(rActor, sSave)
 	local rRoll = getRoll_old(rActor, sSave); -- inheret output of previously-loaded getRoll function
-	local sActorType, nodeActor = ActorManager.getTypeAndNode(rActor);
-	local sAbility2 = nil;
-	if nodeActor and sActorType == "pc" then
-		sAbility2 = DB.getValue(nodeActor, "saves." .. sSave .. ".ability2", ""); -- bmos adding second save ability
-	end
-
-	if sAbility2 and sAbility2 ~= "" then
-		local sAbilityEffect2 = DataCommon.ability_ltos[sAbility2];
-		if sAbilityEffect2 then
-			rRoll.sDesc = rRoll.sDesc .. " [EXTRA MOD:" .. sAbilityEffect2 .. "]"; -- bmos adding extra save mod to roll
+	local sAbility, sAbility2 -- bmos adding second save stat
+	if rActor then
+		local nodeCT = ActorManager.getCTNode(rActor);
+		if nodeCT then
+			rRoll.nMod = DB.getValue(nodeCT, sSave .. "save", 0);
+		elseif ActorManager.isPC(rActor) then
+			local nodePC = ActorManager.getCreatureNode(rActor);
+			rRoll.nMod = DB.getValue(nodePC, "saves." .. sSave .. ".total", 0);
+			sAbility = DB.getValue(nodePC, "saves." .. sSave .. ".ability", "");
+			sAbility2 = DB.getValue(nodeActor, "saves." .. sSave .. ".ability2", ""); -- bmos adding second save ability
 		end
 	end
+	if sAbility2 and sAbility2 ~= "" then -- bmos adding extra save mod to roll
+		local sAbilityEffect2 = DataCommon.ability_ltos[sAbility2];
+		if sAbilityEffect2 then
+			rRoll.sDesc = rRoll.sDesc .. " [EXTRA MOD:" .. sAbilityEffect2 .. "]";
+		end
+	end -- end bmos adding extra save mod to roll
 	
 	return rRoll;
 end
@@ -73,7 +79,7 @@ function modSave_new(rSource, rTarget, rRoll)
 		end
 		if sModStat2 then -- bmos adding second save stat
 			sActionStat2 = DataCommon.ability_stol[sModStat2];
-		end
+		end -- end bmos adding second save stat
 		if not sActionStat then
 			if sSave == "fortitude" then
 				sActionStat = "constitution";
@@ -97,23 +103,14 @@ function modSave_new(rSource, rTarget, rRoll)
 		elseif EffectManager35E.hasEffect(rSource, "Flat-footed") or EffectManager35E.hasEffect(rSource, "Flatfooted") then
 			bFlatfooted = true;
 		end
-		
+
 		-- Get effect modifiers
 		local rSaveSource = nil;
 		if rRoll.sSource then
-			rSaveSource = ActorManager.getActor("ct", rRoll.sSource);
+			rSaveSource = ActorManager.resolveActor(rRoll.sSource);
 		end
 		local aExistingBonusByType = {};
-		
-		-- KEL Adding tag information
-		local sEffectSpell = rRoll.tags;
-		local aSaveEffects = {}
-		if isUsingKelSV() then
-			aSaveEffects = EffectManager35E.getEffectsByType(rSource, "SAVE", aSaveFilter, rSaveSource, false, sEffectSpell);
-		else
-			aSaveEffects = EffectManager35E.getEffectsByType(rSource, "SAVE", aSaveFilter, rSaveSource, false);
-		end
-		
+		local aSaveEffects = EffectManager35E.getEffectsByType(rSource, "SAVE", aSaveFilter, rSaveSource, false);
 		for _,v in pairs(aSaveEffects) do
 			-- Determine bonus type if any
 			local sBonusType = nil;
@@ -166,10 +163,10 @@ function modSave_new(rSource, rTarget, rRoll)
 				bEffects = true;
 			end
 		end
-
+		
 		-- Get ability modifiers
-		local nBonusStat, nBonusEffects = ActorManager2.getAbilityEffectsBonus(rSource, sActionStat);
-		local nBonusStat2, nBonusEffects2 = ActorManager2.getAbilityEffectsBonus(rSource, sActionStat2); -- bmos adding effects for second save stat
+		local nBonusStat, nBonusEffects = ActorManager35E.getAbilityEffectsBonus(rSource, sActionStat);
+		local nBonusStat2, nBonusEffects2 = ActorManager35E.getAbilityEffectsBonus(rSource, sActionStat2); -- bmos adding effects for second save stat
 		if nBonusEffects > 0 then
 			bEffects = true;
 			nAddMod = nAddMod + nBonusStat;
@@ -177,7 +174,7 @@ function modSave_new(rSource, rTarget, rRoll)
 		if nBonusEffects2 > 0 then -- bmos adding effects for second save stat
 			bEffects = true;
 			nAddMod = nAddMod + nBonusStat2;
-		end
+		end -- end bmos adding effects for second save stat
 		
 		-- Get negative levels
 		local nNegLevelMod, nNegLevelCount = EffectManager35E.getEffectsBonus(rSource, {"NLVL"}, true);
