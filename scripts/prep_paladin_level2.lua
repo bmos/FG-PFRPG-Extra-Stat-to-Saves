@@ -18,12 +18,12 @@ function prepPaladin(nodeClassLevel)
 			local sWill2Stat = DB.getValue(nodeChar, 'saves.will.ability2')
 			
 			local bGMOnlyConnected = nil -- check if GM is leveling-up for players
-			if table.getn(User.getActiveUsers()) == 0 and User.isHost then bGMOnlyConnected = true end
+			if table.getn(User.getActiveUsers()) == 0 and Session.IsHost then bGMOnlyConnected = true end
 			
 			local bStatChanged = nil -- check if any of the ability2 fields are still at default values
 			if not sFort2Stat or not sRef2Stat or not sWill2Stat or sFort2Stat == '' or sRef2Stat == '' or sWill2Stat == '' then bStatChanged = true end
 
-			if bStatChanged and (not User.isHost or bGMOnlyConnected) then -- if any ability2 are at default values, set them to charisma
+			if bStatChanged and (not Session.IsHost or bGMOnlyConnected) then -- if any ability2 are at default values, set them to charisma
 				local sFormat = Interface.getString('char_message_paladinsecondsave') -- add mention of this change to the level-up messaging
 				local sMsg = string.format(sFormat, DB.getValue(nodeChar, "name", ''))
 				ChatManager.SystemMessage(sMsg);
