@@ -9,8 +9,12 @@
 		<version>2.3</version>
 		<author>bmos (Wil Thieme)</author>
 		<description>This extension adds a second set of ability cyclers on the combat tab so that classes like paladins can add CHA (or any other ablity mod) to their saves.</description>
-		<ruleset name="PFRPG" />
-		<ruleset name="3.5E" />
+		<ruleset>
+			<name>3.5E</name>
+		</ruleset>
+		<ruleset>
+			<name>PFRPG</name>
+		</ruleset>
 	</properties>
 
 	<announcement text="https://github.com/bmos/FG-PFRPG-Extra-Stat-to-Saves\nPFRPG Extra Stat to Saves v2.3:\nThis extension adds a second set of ability cyclers on the combat tab so that classes like paladins can add CHA (or any other ablity mod) to their saves" font="emotefont" />
