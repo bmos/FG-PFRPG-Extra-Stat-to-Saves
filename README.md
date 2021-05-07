@@ -1,4 +1,4 @@
-# PFRPG Extra Stat to Save
+# PFRPG Extra Stat to Saves
 This extension adds a second set of ability cyclers on the combat tab so that classes like paladins can add CHA (or any other ablity mod) to their saves.
 Paladins will automatically have this enabled at the appropriate level.
 
