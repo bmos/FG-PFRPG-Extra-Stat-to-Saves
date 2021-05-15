@@ -46,8 +46,7 @@ function getRoll_new(rActor, sSave)
 end
 
 local function isUsingKelSV()
-	return (StringManager.contains(Extension.getExtensions(), "Save versus tags") or
-			StringManager.contains(Extension.getExtensions(), "Full OverlayPackage") or
+	return (StringManager.contains(Extension.getExtensions(), "Full OverlayPackage") or
 			StringManager.contains(Extension.getExtensions(), "Full OverlayPackage with alternative icons"));
 end
 
@@ -57,14 +56,13 @@ function modSave_new(rSource, rTarget, rRoll)
 	local aAddDesc = {};
 	local aAddDice = {};
 	local nAddMod = 0;
-	
+
 	-- Determine save type
 	local sSave = nil;
 	local sSaveMatch = rRoll.sDesc:match("%[SAVE%] ([^[]+)");
 	if sSaveMatch then
 		sSave = StringManager.trim(sSaveMatch):lower();
 	end
-	
 
 	if rSource then
 		local bEffects = false;
@@ -89,13 +87,13 @@ function modSave_new(rSource, rTarget, rRoll)
 				sActionStat = "wisdom";
 			end
 		end
-		
+
 		-- Build save filter
 		local aSaveFilter = {};
 		if sSave then
 			table.insert(aSaveFilter, sSave);
 		end
-		
+
 		-- Determine flatfooted status
 		local bFlatfooted = false;
 		if not rRoll.bVsSave and ModifierStack.getModifierKey("ATT_FF") then
@@ -104,13 +102,18 @@ function modSave_new(rSource, rTarget, rRoll)
 			bFlatfooted = true;
 		end
 
+		-- KEL Tags
+		local sEffectSpell = rRoll.tags;
+
 		-- Get effect modifiers
 		local rSaveSource = nil;
 		if rRoll.sSource then
 			rSaveSource = ActorManager.resolveActor(rRoll.sSource);
 		end
 		local aExistingBonusByType = {};
-		local aSaveEffects = EffectManager35E.getEffectsByType(rSource, "SAVE", aSaveFilter, rSaveSource, false);
+
+		-- KEL Adding tag information
+		local aSaveEffects = EffectManager35E.getEffectsByType(rSource, "SAVE", aSaveFilter, rSaveSource, false, sEffectSpell);
 		for _,v in pairs(aSaveEffects) do
 			-- Determine bonus type if any
 			local sBonusType = nil;
