@@ -47,7 +47,8 @@ end
 
 local function isUsingKelSV()
 	return (StringManager.contains(Extension.getExtensions(), "Full OverlayPackage") or
-			StringManager.contains(Extension.getExtensions(), "Full OverlayPackage with alternative icons"));
+			StringManager.contains(Extension.getExtensions(), "Full OverlayPackage with alternative icons") or
+			StringManager.contains(Extension.getExtensions(), "Full OverlayPackage with other icons"));
 end
 
 -- it seems I must override this function completely as it does not return data
