@@ -45,14 +45,9 @@ function getRoll_new(rActor, sSave)
 	return rRoll;
 end
 
-local function isUsingKelSV()
-	return (StringManager.contains(Extension.getExtensions(), "Full OverlayPackage") or
-			StringManager.contains(Extension.getExtensions(), "Full OverlayPackage with alternative icons") or
-			StringManager.contains(Extension.getExtensions(), "Full OverlayPackage with other icons"));
-end
-
--- it seems I must override this function completely as it does not return data
--- I have included checks to ensure compatibility with Kelrugem's Save Versus Tags 
+-- It seems I must override this function completely as it does not return data
+-- I have included checks to ensure compatibility with Kelrugem's Save Versus Tags
+-- Includes current 3.5E ruleset code as of 2021-08-01
 function modSave_new(rSource, rTarget, rRoll)
 	local aAddDesc = {};
 	local aAddDice = {};
