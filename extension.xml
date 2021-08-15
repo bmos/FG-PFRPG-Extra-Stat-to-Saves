@@ -4,7 +4,7 @@
 
 <root version='3.3' release='3'>
 	<properties>
-		<loadorder>30</loadorder>
+		<loadorder>36</loadorder>
 		<name>Feature: Extra Stat to Saves</name>
 		<version>2.4</version>
 		<author>bmos (Wil Thieme)</author>

@@ -32,7 +32,7 @@ function getRoll_new(rActor, sSave)
 			local nodePC = ActorManager.getCreatureNode(rActor);
 			rRoll.nMod = DB.getValue(nodePC, "saves." .. sSave .. ".total", 0);
 			sAbility = DB.getValue(nodePC, "saves." .. sSave .. ".ability", "");
-			sAbility2 = DB.getValue(nodeActor, "saves." .. sSave .. ".ability2", ""); -- bmos adding second save ability
+			sAbility2 = DB.getValue(nodePC, "saves." .. sSave .. ".ability2", ""); -- bmos adding second save ability
 		end
 	end
 	if sAbility2 and sAbility2 ~= "" then -- bmos adding extra save mod to roll
