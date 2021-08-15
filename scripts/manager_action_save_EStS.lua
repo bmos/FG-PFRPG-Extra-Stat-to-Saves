@@ -44,7 +44,7 @@ function getRoll_new(rActor, sSave)
 	if sAbility2 and sAbility2 ~= "" then
 		local sAbilityEffect2 = DataCommon.ability_ltos[sAbility2];
 		if sAbilityEffect2 then
-			rRoll.sDesc = rRoll.sDesc .. " [EXTRA MOD:" .. sAbilityEffect2 .. "]";
+			rRoll.sDesc = rRoll.sDesc .. " [EXTRA MOD: " .. sAbilityEffect2 .. "]";
 		end
 	end
 	-- end bmos adding extra save mod to roll
@@ -64,7 +64,7 @@ function modSave_new(rSource, rTarget, rRoll)
 	if rSource then
 		-- Determine ability used
 		local sActionStat2 = nil; -- bmos adding second save stat
-		local sModStat2 = string.match(rRoll.sDesc, "%[EXTRA MOD:(%w+)%]"); -- bmos adding second save stat
+		local sModStat2 = string.match(rRoll.sDesc, "%[EXTRA MOD: (%w+)%]"); -- bmos adding second save stat
 		if sModStat2 then -- bmos adding second save stat
 			sActionStat2 = DataCommon.ability_stol[sModStat2];
 		end
