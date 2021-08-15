@@ -19,6 +19,9 @@ end
 function onClose()
 	ActionSave.getRoll = getRoll_old;
 	ActionSave.modSave = modSave_old;
+	
+	ActionsManager.unregisterModHandler("save");
+	ActionsManager.registerModHandler("save", ActionSave.modSave);
 end
 
 function getRoll_new(rActor, sSave)
