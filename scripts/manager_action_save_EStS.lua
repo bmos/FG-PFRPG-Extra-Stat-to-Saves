@@ -26,24 +26,29 @@ end
 
 function getRoll_new(rActor, sSave)
 	local rRoll = getRoll_old(rActor, sSave); -- inheret output of previously-loaded getRoll function
-	local sAbility2 -- bmos adding second save stat
+	-- bmos adding second save stat
+	local sAbility2
 	if rActor then
 		local nodeCT = ActorManager.getCTNode(rActor);
-		if nodeCT then
-			rRoll.nMod = DB.getValue(nodeCT, sSave .. "save", 0);
-		elseif ActorManager.isPC(rActor) then
+		if ActorManager.isPC(rActor) then
 			local nodePC = ActorManager.getCreatureNode(rActor);
 			rRoll.nMod = DB.getValue(nodePC, "saves." .. sSave .. ".total", 0);
-			sAbility2 = DB.getValue(nodePC, "saves." .. sSave .. ".ability2", ""); -- bmos adding second save ability
+			sAbility2 = DB.getValue(nodePC, "saves." .. sSave .. ".ability2", "");
+		elseif nodeCT then
+			rRoll.nMod = DB.getValue(nodeCT, sSave .. "save", 0);
 		end
 	end
-	if sAbility2 and sAbility2 ~= "" then -- bmos adding extra save mod to roll
+	-- bmos adding second save ability
+
+	-- bmos adding extra save mod to roll
+	if sAbility2 and sAbility2 ~= "" then
 		local sAbilityEffect2 = DataCommon.ability_ltos[sAbility2];
 		if sAbilityEffect2 then
 			rRoll.sDesc = rRoll.sDesc .. " [EXTRA MOD:" .. sAbilityEffect2 .. "]";
 		end
-	end -- end bmos adding extra save mod to roll
-	
+	end
+	-- end bmos adding extra save mod to roll
+
 	return rRoll;
 end
 
