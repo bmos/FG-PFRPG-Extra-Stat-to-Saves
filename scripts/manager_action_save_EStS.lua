@@ -165,7 +165,7 @@ function modSave_new(rSource, rTarget, rRoll)
 				bEffects = true;
 			end
 		end
-		
+
 		-- Get ability modifiers
 		local nBonusStat, nBonusEffects = ActorManager35E.getAbilityEffectsBonus(rSource, sActionStat);
 		local nBonusStat2, nBonusEffects2 = ActorManager35E.getAbilityEffectsBonus(rSource, sActionStat2); -- bmos adding effects for second save stat
@@ -177,7 +177,7 @@ function modSave_new(rSource, rTarget, rRoll)
 			bEffects = true;
 			nAddMod = nAddMod + nBonusStat2;
 		end -- end bmos adding effects for second save stat
-		
+
 		-- Get negative levels
 		local nNegLevelMod, nNegLevelCount = EffectManager35E.getEffectsBonus(rSource, {"NLVL"}, true);
 		if nNegLevelCount > 0 then
@@ -189,7 +189,7 @@ function modSave_new(rSource, rTarget, rRoll)
 		if bFlatfooted then
 			table.insert(aAddDesc, "[FF]");
 		end
-		
+
 		-- If effects, then add them
 		if bEffects then
 			local sEffects = "";
@@ -202,7 +202,7 @@ function modSave_new(rSource, rTarget, rRoll)
 			table.insert(aAddDesc, sEffects);
 		end
 	end
-	
+
 	if #aAddDesc > 0 then
 		rRoll.sDesc = rRoll.sDesc .. " " .. table.concat(aAddDesc, " ");
 	end
