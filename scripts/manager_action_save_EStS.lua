@@ -56,157 +56,41 @@ end
 -- I have included checks to ensure compatibility with Kelrugem's Save Versus Tags
 -- Includes current 3.5E ruleset code as of 2021-08-01
 function modSave_new(rSource, rTarget, rRoll)
+	modSave_old(rSource, rTarget, rRoll)
 	local aAddDesc = {};
 	local aAddDice = {};
 	local nAddMod = 0;
 
-	-- Determine save type
-	local sSave = nil;
-	local sSaveMatch = rRoll.sDesc:match("%[SAVE%] ([^[]+)");
-	if sSaveMatch then
-		sSave = StringManager.trim(sSaveMatch):lower();
-	end
-
 	if rSource then
-		local bEffects = false;
-
 		-- Determine ability used
-		local sActionStat = nil;
 		local sActionStat2 = nil; -- bmos adding second save stat
-		local sModStat = string.match(rRoll.sDesc, "%[MOD:(%w+)%]");
 		local sModStat2 = string.match(rRoll.sDesc, "%[EXTRA MOD:(%w+)%]"); -- bmos adding second save stat
-		if sModStat then
-			sActionStat = DataCommon.ability_stol[sModStat];
-		end
 		if sModStat2 then -- bmos adding second save stat
 			sActionStat2 = DataCommon.ability_stol[sModStat2];
-		end -- end bmos adding second save stat
-		if not sActionStat then
-			if sSave == "fortitude" then
-				sActionStat = "constitution";
-			elseif sSave == "reflex" then
-				sActionStat = "dexterity";
-			elseif sSave == "will" then
-				sActionStat = "wisdom";
-			end
 		end
+		-- end bmos adding second save stat
 
-		-- Build save filter
-		local aSaveFilter = {};
-		if sSave then
-			table.insert(aSaveFilter, sSave);
-		end
-
-		-- Determine flatfooted status
-		local bFlatfooted = false;
-		if not rRoll.bVsSave and ModifierStack.getModifierKey("ATT_FF") then
-			bFlatfooted = true;
-		elseif EffectManager35E.hasEffect(rSource, "Flat-footed") or EffectManager35E.hasEffect(rSource, "Flatfooted") then
-			bFlatfooted = true;
-		end
-
-		-- KEL Tags
-		local sEffectSpell = rRoll.tags;
-
-		-- Get effect modifiers
-		local rSaveSource = nil;
-		if rRoll.sSource then
-			rSaveSource = ActorManager.resolveActor(rRoll.sSource);
-		end
-		local aExistingBonusByType = {};
-
-		-- KEL Adding tag information
-		local aSaveEffects = EffectManager35E.getEffectsByType(rSource, "SAVE", aSaveFilter, rSaveSource, false, sEffectSpell);
-		for _,v in pairs(aSaveEffects) do
-			-- Determine bonus type if any
-			local sBonusType = nil;
-			for _,v2 in pairs(v.remainder) do
-				if StringManager.contains(DataCommon.bonustypes, v2) then
-					sBonusType = v2;
-					break;
-				end
-			end
-			-- Dodge bonuses stack (by rules)
-			if sBonusType then
-				if sBonusType == "dodge" then
-					if not bFlatfooted then
-						nAddMod = nAddMod + v.mod;
-						bEffects = true;
-					end
-				elseif aExistingBonusByType[sBonusType] then
-					if v.mod < 0 then
-						nAddMod = nAddMod + v.mod;
-					elseif v.mod > aExistingBonusByType[sBonusType] then
-						nAddMod = nAddMod + v.mod - aExistingBonusByType[sBonusType];
-						aExistingBonusByType[sBonusType] = v.mod;
-					end
-					bEffects = true;
-				else
-					nAddMod = nAddMod + v.mod;
-					aExistingBonusByType[sBonusType] = v.mod;
-					bEffects = true;
-				end
-			else
-				nAddMod = nAddMod + v.mod;
-				bEffects = true;
-			end
-		end
-
-		-- Get condition modifiers
-		if EffectManager35E.hasEffectCondition(rSource, "Frightened") or 
-				EffectManager35E.hasEffectCondition(rSource, "Panicked") or
-				EffectManager35E.hasEffectCondition(rSource, "Shaken") then
-			nAddMod = nAddMod - 2;
-			bEffects = true;
-		end
-		if EffectManager35E.hasEffectCondition(rSource, "Sickened") then
-			nAddMod = nAddMod - 2;
-			bEffects = true;
-		end
-		if sSave == "reflex" then
-			if EffectManager35E.hasEffectCondition(rSource, "Slowed") then
-				nAddMod = nAddMod - 1;
-				bEffects = true;
-			end
-		end
-
-		-- Get ability modifiers
-		local nBonusStat, nBonusEffects = ActorManager35E.getAbilityEffectsBonus(rSource, sActionStat);
-		local nBonusStat2, nBonusEffects2 = ActorManager35E.getAbilityEffectsBonus(rSource, sActionStat2); -- bmos adding effects for second save stat
-		if nBonusEffects > 0 then
-			bEffects = true;
-			nAddMod = nAddMod + nBonusStat;
-		end
-		if nBonusEffects2 > 0 then -- bmos adding effects for second save stat
+		-- bmos adding effects for second save stat
+		local nBonusStat2, nBonusEffects2 = ActorManager35E.getAbilityEffectsBonus(rSource, sActionStat2);
+		if nBonusEffects2 > 0 then
 			bEffects = true;
 			nAddMod = nAddMod + nBonusStat2;
-		end -- end bmos adding effects for second save stat
-
-		-- Get negative levels
-		local nNegLevelMod, nNegLevelCount = EffectManager35E.getEffectsBonus(rSource, {"NLVL"}, true);
-		if nNegLevelCount > 0 then
-			bEffects = true;
-			nAddMod = nAddMod - nNegLevelMod;
 		end
+		-- end bmos adding effects for second save stat
 
-		-- If flatfooted, then add a note
-		if bFlatfooted then
-			table.insert(aAddDesc, "[FF]");
-		end
-
-		-- If effects, then add them
+		-- If effects, then add them to the in-chat roll description
 		if bEffects then
 			local sEffects = "";
 			local sMod = StringManager.convertDiceToString(aAddDice, nAddMod, true);
 			if sMod ~= "" then
-				sEffects = "[" .. Interface.getString("effects_tag") .. " " .. sMod .. "]";
+				sEffects = "[SECOND MOD " .. Interface.getString("effects_tag") .. " " .. sMod .. "]";
 			else
-				sEffects = "[" .. Interface.getString("effects_tag") .. "]";
+				sEffects = "[SECOND MOD " .. Interface.getString("effects_tag") .. "]";
 			end
 			table.insert(aAddDesc, sEffects);
 		end
 	end
-
+	
 	if #aAddDesc > 0 then
 		rRoll.sDesc = rRoll.sDesc .. " " .. table.concat(aAddDesc, " ");
 	end
