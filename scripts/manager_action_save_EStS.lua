@@ -24,8 +24,8 @@ function onClose()
 	ActionsManager.registerModHandler("save", ActionSave.modSave);
 end
 
-function getRoll_new(rActor, sSave)
-	local rRoll = getRoll_old(rActor, sSave); -- inheret output of previously-loaded getRoll function
+function getRoll_new(rActor, sSave, ...)
+	local rRoll = getRoll_old(rActor, sSave, ...); -- inheret output of previously-loaded getRoll function
 	-- bmos adding second save stat
 	local sAbility2
 	if rActor then
@@ -55,8 +55,8 @@ end
 -- It seems I must override this function completely as it does not return data
 -- I have included checks to ensure compatibility with Kelrugem's Save Versus Tags
 -- Includes current 3.5E ruleset code as of 2021-08-01
-function modSave_new(rSource, rTarget, rRoll)
-	modSave_old(rSource, rTarget, rRoll)
+function modSave_new(rSource, rTarget, rRoll, ...)
+	modSave_old(rSource, rTarget, rRoll, ...)
 	local aAddDesc = {};
 	local aAddDice = {};
 	local nAddMod = 0;
