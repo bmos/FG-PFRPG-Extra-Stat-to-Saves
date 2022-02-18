@@ -81,7 +81,7 @@ function modSave_new(rSource, rTarget, rRoll, ...)
 		-- If effects, then add them to the in-chat roll description
 		if bEffects then
 			local sEffects = "";
-			local sMod = StringManager.convertDiceToString(aAddDice, nAddMod, true);
+			local sMod = DiceManager.convertDiceToString(aAddDice, nAddMod, true);
 			if sMod ~= "" then
 				sEffects = "[SECOND MOD " .. Interface.getString("effects_tag") .. " " .. sMod .. "]";
 			else
