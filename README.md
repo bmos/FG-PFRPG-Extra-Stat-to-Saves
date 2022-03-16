@@ -1,3 +1,5 @@
+[![Build FG-Usable File](https://github.com/bmos/FG-PFRPG-Extra-Stat-to-Saves/actions/workflows/create-ext.yml/badge.svg)](https://github.com/bmos/FG-PFRPG-Extra-Stat-to-Saves/actions/workflows/create-ext.yml) [![Luacheck](https://github.com/bmos/FG-PFRPG-Extra-Stat-to-Saves/actions/workflows/luacheck.yml/badge.svg)](https://github.com/bmos/FG-PFRPG-Extra-Stat-to-Saves/actions/workflows/luacheck.yml)
+
 # PFRPG Extra Stat to Saves
 This extension adds a second set of ability cyclers on the combat tab so that classes like paladins can add CHA (or any other ablity mod) to their saves.
 Paladins will automatically have this enabled at the appropriate level.
