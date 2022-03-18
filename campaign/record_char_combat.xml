@@ -17,41 +17,14 @@
 				<fieldabilitymod>fortitudestatmod2</fieldabilitymod>
 				<source><name>saves.fortitude.ability2</name></source>
 				<parameters><defaultlabelres>-</defaultlabelres></parameters>
-				<script>
-					function onValueChanged()
-						if window.isInitialized() then
-							local sValue = getStringValue();
-							if sValue == "" and baseability then
-								sValue = baseability[1];
-							end
-							
-							local sCharRelative = "";
-							if abilityrelative then
-								sCharRelative = abilityrelative[1];
-							end
-							
-							if fieldabilitymod and window[fieldabilitymod[1]] then
-								window[fieldabilitymod[1]].updateAbility(sCharRelative, sValue);
-							end
-						end
-					end
-				</script>
+				<script file="campaign/scripts/savestat2.lua" />
 			</cycler_ability>
 			<number_charcombatabilitymod name="fortitudestatmod2" source="saves.fortitude.abilitymod2">
 				<anchored to="fortitudebase" offset="115,0" />
 			</number_charcombatabilitymod>
 			<number_charcombatmod name="fortitudemisc" source="saves.fortitude.misc">
 				<anchored to="fortitudestatmod" offset="70" width="20" />
-				<script>
-					function onInit()
-						local nodeAbil = getDatabaseNode().getParent()
-						local nMisc2 = DB.getValue(nodeAbil, 'misc2')
-						if nMisc2 then
-							if nMisc2 ~= 0 then setValue(nMisc2) end
-							DB.deleteChild(nodeAbil, 'misc2')
-						end
-					end
-				</script>
+				<script file="campaign/scripts/savemisc.lua" />
 			</number_charcombatmod>
 
 			<number_charcombatmod name="reflexbase" source="saves.reflex.base">
@@ -62,41 +35,14 @@
 				<fieldabilitymod>reflexstatmod2</fieldabilitymod>
 				<source><name>saves.reflex.ability2</name></source>
 				<parameters><defaultlabelres>-</defaultlabelres></parameters>
-				<script>
-					function onValueChanged()
-						if window.isInitialized() then
-							local sValue = getStringValue();
-							if sValue == "" and baseability then
-								sValue = baseability[1];
-							end
-							
-							local sCharRelative = "";
-							if abilityrelative then
-								sCharRelative = abilityrelative[1];
-							end
-							
-							if fieldabilitymod and window[fieldabilitymod[1]] then
-								window[fieldabilitymod[1]].updateAbility(sCharRelative, sValue);
-							end
-						end
-					end
-				</script>
+				<script file="campaign/scripts/savestat2.lua" />
 			</cycler_ability>
 			<number_charcombatabilitymod name="reflexstatmod2" source="saves.reflex.abilitymod2">
 				<anchored to="reflexbase" offset="115,0" />
 			</number_charcombatabilitymod>
 			<number_charcombatmod name="reflexmisc" source="saves.reflex.misc">
 				<anchored to="reflexstatmod" offset="70" width="20" />
-				<script>
-					function onInit()
-						local nodeAbil = getDatabaseNode().getParent()
-						local nMisc2 = DB.getValue(nodeAbil, 'misc2')
-						if nMisc2 then
-							if nMisc2 ~= 0 then setValue(nMisc2) end
-							DB.deleteChild(nodeAbil, 'misc2')
-						end
-					end
-				</script>
+				<script file="campaign/scripts/savemisc.lua" />
 			</number_charcombatmod>
 
 			<number_charcombatmod name="willbase" source="saves.will.base">
@@ -107,41 +53,14 @@
 				<fieldabilitymod>willstatmod2</fieldabilitymod>
 				<source><name>saves.will.ability2</name></source>
 				<parameters><defaultlabelres>-</defaultlabelres></parameters>
-				<script>
-					function onValueChanged()
-						if window.isInitialized() then
-							local sValue = getStringValue();
-							if sValue == "" and baseability then
-								sValue = baseability[1];
-							end
-							
-							local sCharRelative = "";
-							if abilityrelative then
-								sCharRelative = abilityrelative[1];
-							end
-							
-							if fieldabilitymod and window[fieldabilitymod[1]] then
-								window[fieldabilitymod[1]].updateAbility(sCharRelative, sValue);
-							end
-						end
-					end
-				</script>
+				<script file="campaign/scripts/savestat2.lua" />
 			</cycler_ability>
 			<number_charcombatabilitymod name="willstatmod2" source="saves.will.abilitymod2">
 				<anchored to="willbase" offset="115,0" />
 			</number_charcombatabilitymod>
 			<number_charcombatmod name="willmisc" source="saves.will.misc">
 				<anchored to="willstatmod" offset="70" width="20" />
-				<script>
-					function onInit()
-						local nodeAbil = getDatabaseNode().getParent()
-						local nMisc2 = DB.getValue(nodeAbil, 'misc2')
-						if nMisc2 then
-							if nMisc2 ~= 0 then setValue(nMisc2) end
-							DB.deleteChild(nodeAbil, 'misc2')
-						end
-					end
-				</script>
+				<script file="campaign/scripts/savemisc.lua" />
 			</number_charcombatmod>
 
 			<label_fieldtop name="savestatmod2_label">
@@ -152,7 +71,7 @@
 			</label_fieldtop>
 		</sheetdata>
 	</windowclass>
-	
+
 	<template name="number_charsavefort">
 		<number_charsave>
 			<modifierfield>saves.fortitude.temporary</modifierfield>

@@ -1,28 +1,9 @@
--- 
+--
 -- Please see the LICENSE.md file included with this distribution for attribution and copyright information.
 --
 
 local getRoll_old = nil
 local modSave_old = nil
-
--- Function Overrides
-function onInit()
-	getRoll_old = ActionSave.getRoll;
-	ActionSave.getRoll = getRoll_new;
-	modSave_old = ActionSave.modSave;
-	ActionSave.modSave = modSave_new;
-
-	ActionsManager.unregisterModHandler("save");
-	ActionsManager.registerModHandler("save", modSave_new);
-end
-
-function onClose()
-	ActionSave.getRoll = getRoll_old;
-	ActionSave.modSave = modSave_old;
-	
-	ActionsManager.unregisterModHandler("save");
-	ActionsManager.registerModHandler("save", ActionSave.modSave);
-end
 
 function getRoll_new(rActor, sSave, ...)
 	local rRoll = getRoll_old(rActor, sSave, ...); -- inheret output of previously-loaded getRoll function
@@ -70,6 +51,7 @@ function modSave_new(rSource, rTarget, rRoll, ...)
 		end
 		-- end bmos adding second save stat
 
+		local bEffects;
 		-- bmos adding effects for second save stat
 		local nBonusStat2, nBonusEffects2 = ActorManager35E.getAbilityEffectsBonus(rSource, sActionStat2);
 		if nBonusEffects2 > 0 then
@@ -80,7 +62,7 @@ function modSave_new(rSource, rTarget, rRoll, ...)
 
 		-- If effects, then add them to the in-chat roll description
 		if bEffects then
-			local sEffects = "";
+			local sEffects;
 			local sMod = DiceManager.convertDiceToString(aAddDice, nAddMod, true);
 			if sMod ~= "" then
 				sEffects = "[SECOND MOD " .. Interface.getString("effects_tag") .. " " .. sMod .. "]";
@@ -90,7 +72,7 @@ function modSave_new(rSource, rTarget, rRoll, ...)
 			table.insert(aAddDesc, sEffects);
 		end
 	end
-	
+
 	if #aAddDesc > 0 then
 		rRoll.sDesc = rRoll.sDesc .. " " .. table.concat(aAddDesc, " ");
 	end
@@ -102,4 +84,23 @@ function modSave_new(rSource, rTarget, rRoll, ...)
 		end
 	end
 	rRoll.nMod = rRoll.nMod + nAddMod;
+end
+
+-- Function Overrides
+function onInit()
+	getRoll_old = ActionSave.getRoll;
+	ActionSave.getRoll = getRoll_new;
+	modSave_old = ActionSave.modSave;
+	ActionSave.modSave = modSave_new;
+
+	ActionsManager.unregisterModHandler("save");
+	ActionsManager.registerModHandler("save", modSave_new);
+end
+
+function onClose()
+	ActionSave.getRoll = getRoll_old;
+	ActionSave.modSave = modSave_old;
+
+	ActionsManager.unregisterModHandler("save");
+	ActionsManager.registerModHandler("save", ActionSave.modSave);
 end
