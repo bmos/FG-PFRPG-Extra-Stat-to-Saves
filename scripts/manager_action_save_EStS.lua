@@ -5,7 +5,7 @@
 local getRoll_old = nil
 local modSave_old = nil
 
-function getRoll_new(rActor, sSave, ...)
+local function getRoll_new(rActor, sSave, ...)
 	local rRoll = getRoll_old(rActor, sSave, ...); -- inheret output of previously-loaded getRoll function
 	-- bmos adding second save stat
 	local sAbility2
