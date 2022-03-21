@@ -36,7 +36,7 @@ end
 -- It seems I must override this function completely as it does not return data
 -- I have included checks to ensure compatibility with Kelrugem's Save Versus Tags
 -- Includes current 3.5E ruleset code as of 2021-08-01
-function modSave_new(rSource, rTarget, rRoll, ...)
+local function modSave_new(rSource, rTarget, rRoll, ...)
 	modSave_old(rSource, rTarget, rRoll, ...)
 	local aAddDesc = {};
 	local aAddDice = {};
