@@ -4,15 +4,15 @@
 ---	This function auto-sets the second ability stat for each unmodified save to charisma for lvl 2 and up paladins.
 local function prepPaladin(nodeClassLevel)
 	if DB.isOwner(nodeClassLevel) then
-		local nodeChar = nodeClassLevel.getChild('..')
+		local nodeChar = nodeClassLevel.getParent()
 		local nPalLvl = DB.getValue(CharManager.getClassNode(nodeChar, 'Paladin'), 'level')
 
-		if nPalLvl and nPalLvl >= 2 then -- if PC is at least a 2nd level paladin
+		if nPalLvl and nPalLvl > 1 then -- if PC is at least a 2nd level paladin
 			local sFort2Stat = DB.getValue(nodeChar, 'saves.fortitude.ability2')
 			local sRef2Stat = DB.getValue(nodeChar, 'saves.reflex.ability2')
 			local sWill2Stat = DB.getValue(nodeChar, 'saves.will.ability2')
 
-			local bGMOnlyConnected = nil -- check if GM is leveling-up for players
+			local bGMOnlyConnected -- check if GM is leveling-up for players
 			-- luacheck: globals table
 			if table.getn(User.getActiveUsers()) == 0 and Session.IsHost then bGMOnlyConnected = true end
 
