@@ -1,9 +1,8 @@
 --
 -- Please see the LICENSE.md file included with this distribution for attribution and copyright information.
 --
-local getRoll_old = nil
-local modSave_old = nil
 
+local getRoll_old = nil
 local function getRoll_new(rActor, sSave, ...)
 	local rRoll = getRoll_old(rActor, sSave, ...); -- inheret output of previously-loaded getRoll function
 	-- bmos adding second save stat
@@ -33,6 +32,7 @@ end
 -- It seems I must override this function completely as it does not return data
 -- I have included checks to ensure compatibility with Kelrugem's Save Versus Tags
 -- Includes current 3.5E ruleset code as of 2021-08-01
+local modSave_old = nil
 local function modSave_new(rSource, rTarget, rRoll, ...)
 	modSave_old(rSource, rTarget, rRoll, ...)
 	local aAddDesc = {};
