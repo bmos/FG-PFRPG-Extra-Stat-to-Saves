@@ -1,6 +1,8 @@
 --
 -- Please see the LICENSE.md file included with this distribution for attribution and copyright information.
 --
+-- luacheck: globals setValue
+
 function onInit()
 	local nodeAbil = getDatabaseNode().getParent()
 	local nMisc2 = DB.getValue(nodeAbil, 'misc2')

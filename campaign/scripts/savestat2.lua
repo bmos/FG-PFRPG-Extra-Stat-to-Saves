@@ -1,6 +1,8 @@
 --
 -- Please see the LICENSE.md file included with this distribution for attribution and copyright information.
 --
+-- luacheck: globals onValueChanged getStringValue baseability abilityrelative fieldabilitymod
+
 function onValueChanged()
 	if window.isInitialized() then
 		local sValue = getStringValue();
