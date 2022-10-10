@@ -24,7 +24,7 @@ local function prepPaladin(nodeClassLevel)
 			if bStatChanged and (not Session.IsHost or bGMOnlyConnected) then -- if any ability2 are at default values, set them to charisma
 				local sFormat = Interface.getString('char_message_paladinsecondsave') -- add mention of this change to the level-up messaging
 				local sMsg = string.format(sFormat, DB.getValue(nodeChar, 'name', ''))
-				ChatManager.SystemMessage(sMsg);
+				ChatManager.SystemMessage(sMsg)
 
 				if not sFort2Stat or sFort2Stat == '' then DB.setValue(nodeChar, 'saves.fortitude.ability2', 'string', 'charisma') end
 				if not sRef2Stat or sRef2Stat == '' then DB.setValue(nodeChar, 'saves.reflex.ability2', 'string', 'charisma') end
