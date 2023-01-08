@@ -4,7 +4,7 @@
 -- luacheck: globals setValue
 
 function onInit()
-	local nodeAbil = getDatabaseNode().getParent()
+	local nodeAbil = DB.getParent(getDatabaseNode())
 	local nMisc2 = DB.getValue(nodeAbil, 'misc2')
 	if nMisc2 then
 		if nMisc2 ~= 0 then setValue(nMisc2) end

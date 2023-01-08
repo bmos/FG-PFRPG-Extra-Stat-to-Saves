@@ -4,7 +4,7 @@
 ---	This function auto-sets the second ability stat for each unmodified save to charisma for lvl 2 and up paladins.
 local function prepPaladin(nodeClassLevel)
 	if DB.isOwner(nodeClassLevel) then
-		local nodeChar = nodeClassLevel.getParent()
+		local nodeChar = DB.getParent(nodeClassLevel)
 		local nPalLvl = DB.getValue(CharManager.getClassNode(nodeChar, 'Paladin'), 'level')
 
 		if nPalLvl and nPalLvl > 1 then -- if PC is at least a 2nd level paladin
