@@ -11,8 +11,8 @@ local function getRoll_new(rActor, sSave, ...)
 		local nodeCT = ActorManager.getCTNode(rActor)
 		if ActorManager.isPC(rActor) then
 			local nodePC = ActorManager.getCreatureNode(rActor)
-			rRoll.nMod = DB.getValue(nodePC, 'saves.' .. sSave .. '.total', 0)
-			sAbility2 = DB.getValue(nodePC, 'saves.' .. sSave .. '.ability2', '')
+			rRoll.nMod = DB.getValue(nodePC, string.format('saves.%s.total', sSave), 0)
+			sAbility2 = DB.getValue(nodePC, string.format('saves.%s.ability2', sSave), '')
 		elseif nodeCT then
 			rRoll.nMod = DB.getValue(nodeCT, sSave .. 'save', 0)
 		end
@@ -22,7 +22,7 @@ local function getRoll_new(rActor, sSave, ...)
 	-- bmos adding extra save mod to roll
 	if sAbility2 and sAbility2 ~= '' then
 		local sAbilityEffect2 = DataCommon.ability_ltos[sAbility2]
-		if sAbilityEffect2 then rRoll.sDesc = rRoll.sDesc .. ' [EXTRA MOD: ' .. sAbilityEffect2 .. ']' end
+		if sAbilityEffect2 then rRoll.sDesc = string.format('%s [EXTRA MOD: %s]', rRoll.sDesc, sAbilityEffect2) end
 	end
 	-- end bmos adding extra save mod to roll
 
@@ -62,15 +62,15 @@ local function modSave_new(rSource, rTarget, rRoll, ...)
 			local sEffects
 			local sMod = DiceManager.convertDiceToString(aAddDice, nAddMod, true)
 			if sMod ~= '' then
-				sEffects = '[SECOND MOD ' .. Interface.getString('effects_tag') .. ' ' .. sMod .. ']'
+				sEffects = string.format('[SECOND MOD %s %s]', Interface.getString('effects_tag'), sMod)
 			else
-				sEffects = '[SECOND MOD ' .. Interface.getString('effects_tag') .. ']'
+				sEffects = string.format('[SECOND MOD %s]', Interface.getString('effects_tag'))
 			end
 			table.insert(aAddDesc, sEffects)
 		end
 	end
 
-	if #aAddDesc > 0 then rRoll.sDesc = rRoll.sDesc .. ' ' .. table.concat(aAddDesc, ' ') end
+	if #aAddDesc > 0 then rRoll.sDesc = string.format('%s %s', rRoll.sDesc, table.concat(aAddDesc, ' ')) end
 	for _, vDie in ipairs(aAddDice) do
 		if vDie:sub(1, 1) == '-' then
 			table.insert(rRoll.aDice, '-p' .. vDie:sub(3))
