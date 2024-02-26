@@ -11,18 +11,20 @@ local function getRoll_new(rActor, sSave, ...)
 		local nodeCT = ActorManager.getCTNode(rActor)
 		if ActorManager.isPC(rActor) then
 			local nodePC = ActorManager.getCreatureNode(rActor)
-			rRoll.nMod = DB.getValue(nodePC, string.format('saves.%s.total', sSave), 0)
-			sAbility2 = DB.getValue(nodePC, string.format('saves.%s.ability2', sSave), '')
+			rRoll.nMod = DB.getValue(nodePC, string.format("saves.%s.total", sSave), 0)
+			sAbility2 = DB.getValue(nodePC, string.format("saves.%s.ability2", sSave), "")
 		elseif nodeCT then
-			rRoll.nMod = DB.getValue(nodeCT, sSave .. 'save', 0)
+			rRoll.nMod = DB.getValue(nodeCT, sSave .. "save", 0)
 		end
 	end
 	-- bmos adding second save ability
 
 	-- bmos adding extra save mod to roll
-	if sAbility2 and sAbility2 ~= '' then
+	if sAbility2 and sAbility2 ~= "" then
 		local sAbilityEffect2 = DataCommon.ability_ltos[sAbility2]
-		if sAbilityEffect2 then rRoll.sDesc = string.format('%s [EXTRA MOD: %s]', rRoll.sDesc, sAbilityEffect2) end
+		if sAbilityEffect2 then
+			rRoll.sDesc = string.format("%s [EXTRA MOD: %s]", rRoll.sDesc, sAbilityEffect2)
+		end
 	end
 	-- end bmos adding extra save mod to roll
 
@@ -42,7 +44,7 @@ local function modSave_new(rSource, rTarget, rRoll, ...)
 	if rSource then
 		-- Determine ability used
 		local sActionStat2 = nil -- bmos adding second save stat
-		local sModStat2 = string.match(rRoll.sDesc, '%[EXTRA MOD: (%w+)%]') -- bmos adding second save stat
+		local sModStat2 = string.match(rRoll.sDesc, "%[EXTRA MOD: (%w+)%]") -- bmos adding second save stat
 		if sModStat2 then -- bmos adding second save stat
 			sActionStat2 = DataCommon.ability_stol[sModStat2]
 		end
@@ -61,21 +63,23 @@ local function modSave_new(rSource, rTarget, rRoll, ...)
 		if bEffects then
 			local sEffects
 			local sMod = DiceManager.convertDiceToString(aAddDice, nAddMod, true)
-			if sMod ~= '' then
-				sEffects = string.format('[SECOND MOD %s %s]', Interface.getString('effects_tag'), sMod)
+			if sMod ~= "" then
+				sEffects = string.format("[SECOND MOD %s %s]", Interface.getString("effects_tag"), sMod)
 			else
-				sEffects = string.format('[SECOND MOD %s]', Interface.getString('effects_tag'))
+				sEffects = string.format("[SECOND MOD %s]", Interface.getString("effects_tag"))
 			end
 			table.insert(aAddDesc, sEffects)
 		end
 	end
 
-	if #aAddDesc > 0 then rRoll.sDesc = string.format('%s %s', rRoll.sDesc, table.concat(aAddDesc, ' ')) end
+	if #aAddDesc > 0 then
+		rRoll.sDesc = string.format("%s %s", rRoll.sDesc, table.concat(aAddDesc, " "))
+	end
 	for _, vDie in ipairs(aAddDice) do
-		if vDie:sub(1, 1) == '-' then
-			table.insert(rRoll.aDice, '-p' .. vDie:sub(3))
+		if vDie:sub(1, 1) == "-" then
+			table.insert(rRoll.aDice, "-p" .. vDie:sub(3))
 		else
-			table.insert(rRoll.aDice, 'p' .. vDie:sub(2))
+			table.insert(rRoll.aDice, "p" .. vDie:sub(2))
 		end
 	end
 	rRoll.nMod = rRoll.nMod + nAddMod
@@ -88,14 +92,14 @@ function onInit()
 	modSave_old = ActionSave.modSave
 	ActionSave.modSave = modSave_new
 
-	ActionsManager.unregisterModHandler('save')
-	ActionsManager.registerModHandler('save', modSave_new)
+	ActionsManager.unregisterModHandler("save")
+	ActionsManager.registerModHandler("save", modSave_new)
 end
 
 function onClose()
 	ActionSave.getRoll = getRoll_old
 	ActionSave.modSave = modSave_old
 
-	ActionsManager.unregisterModHandler('save')
-	ActionsManager.registerModHandler('save', ActionSave.modSave)
+	ActionsManager.unregisterModHandler("save")
+	ActionsManager.registerModHandler("save", ActionSave.modSave)
 end

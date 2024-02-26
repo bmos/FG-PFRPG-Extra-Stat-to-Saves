@@ -5,7 +5,7 @@ This extension adds a second set of ability cyclers on the combat tab so that cl
 Paladins will automatically have this enabled at the appropriate level.
 
 # Compatibility and Instructions
-This extension has been tested with [FantasyGrounds Unity](https://www.fantasygrounds.com/home/FantasyGroundsUnity.php) v4.4.9 (2023-12-18).
+This extension has been tested with [FantasyGrounds Unity](https://www.fantasygrounds.com/home/FantasyGroundsUnity.php) v4.5.0 (2024-02-21).
 
 # Example Image
 <img src="https://i.imgur.com/a4HPnep.png" alt="extra stat to saves example image"/>
